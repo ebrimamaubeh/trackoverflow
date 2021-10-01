@@ -18,7 +18,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('accounts.urls')), 
+    path('account/', include('account.urls')), 
     path('post/', include('post.urls')),
-    # path('questions/', include('questions.urls'))
+    path('accounts/', include('django.contrib.auth.urls')), # buildin django 'accounts'
 ]

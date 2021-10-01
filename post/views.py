@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
 
@@ -26,7 +26,7 @@ def postQuestion(request):
         else:
             return error_status(400, 'invalid form values') # TODO: check errors/messaging
 
-        return index(request)
+        return redirect('post:index')
 
     if request.method == 'GET': 
         form = PostForm()

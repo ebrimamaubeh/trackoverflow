@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'account/css/style.css' %}">
+    <title id="my_title">
+        {% block title %} {% endblock %}
+    </title>
+</head>
+
+<body>
+    <div id="my_header">
+        {% block header %} {% endblock %}
+    </div>
+
+    <div id="my_sidebar">
+        {% block sidebar %} {% endblock %}
+    </div>
+    
+    <div id="my_content">
+        {% block content %}{% endblock %}  
+    </div>
+    
+    <div id="my_footer">
+        {% block footer %} {% endblock %}
+    </div>
+</body>
+</html>

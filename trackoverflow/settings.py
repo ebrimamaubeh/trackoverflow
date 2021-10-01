@@ -38,8 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'accounts.apps.AccountsConfig',
     'post.apps.PostConfig',
+    'account.apps.AccountConfig', 
+
+    'crispy_forms', 
     'taggit', 
 ]
 

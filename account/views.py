@@ -14,10 +14,9 @@ def register_user(request):
             user = form.save()
             login(request, user)
             messages.success(request, "Registration Successful")
-            return redirect('post:index') # TODO: Redirect home later.
-        else:
-            messages.error(request, "Registration Failed: Please fix the errors and try again")
-    
+            return redirect('post:index') 
+        else: # the else fixed the errors in the form, 
+            return render(request, "account/register.html", context={'register_form': form})
     form = NewUserForm()
     return render(request, "account/register.html", context={'register_form': form})
 
@@ -34,10 +33,9 @@ def login_user(request):
                 login(request, user)
                 messages.info(request, "You are successfully logged in.")
                 return redirect('post:index')
-            else: 
-                messages.error(request, 'Invalid username or password')
         else: 
             messages.error(request, "Invalid username or password!")
+            return render(request, "account/login.html", context={'login_form': form})
     
      
     form = AuthenticationForm()

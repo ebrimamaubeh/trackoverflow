@@ -13,13 +13,30 @@
 
 {% block content %}
   <div class="login">
-    <div class="login-triangle"></div>
-    
+    <div class="login-triangle"></div>  
     <h2 class="login-header">Register</h2>
-  
+
     <form class="login-container" method="POST">
+      <!-- https://docs.djangoproject.com/en/2.2/topics/forms/#looping-over-the-form-s-fields -->
       {% csrf_token %}
-      {{ register_form.as_p }}
+
+      {% for field in  register_form %}
+        <div class="form-group">
+          
+          {% if field.errors %}
+            <div class="alert alert-danger">
+              {{ field.errors }} 
+              {{ field.label_tag }} {{ field }}
+              <p class="help">{{ field.help_text }}</p>
+            </div>     
+          {% else %}
+            {{ field.label_tag }} {{ field }} 
+            <p class="help">{{ field.help_text }}</p>       
+          {% endif %}
+
+        </div>
+      {% endfor %}
+
       <p><input type="submit" value="Register"></p>
     </form>
 

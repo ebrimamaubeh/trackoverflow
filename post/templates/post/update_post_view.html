@@ -1,0 +1,8 @@
+<h1>Update Post</h1>
+
+<form action="/post/update/post/" method="POST">
+    {% csrf_token %}
+    {{ post_form.as_p }}
+    <input type="hidden" name="post_id" value="{{ post.id }}">
+    <input type="submit" value="Post Your Question">
+</form>

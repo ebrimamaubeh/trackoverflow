@@ -6,11 +6,21 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 from post.models import Post
+from comment.models import Comment
 from .forms import PostForm 
 
 def index(request):
     posts = Post.objects.all()
     return render(request, 'post/index.html' ,context={'posts': posts})
+
+def detail(request, post_id):
+    try:
+        post = Post.objects.get(id=post_id)
+        comments = Comment.objects.filter(post=post)
+        return render(request, 'post/detail.html', 
+            context={'post': post, 'comments': comments})
+    except ObjectDoesNotExist as e:
+        return HttpResponse('could not get post!', status=404)
 
 
 def error_status(status, reason=None):
@@ -36,7 +46,9 @@ def postQuestion(request):
         #TODO: not working 
         if form.is_valid(): # make sure validation is working later, 
             if request.user.is_authenticated: 
-                post = Post.objects.create(user=request.user, title=request.POST.get('title'), content=request.POST.get('content'))
+                title = request.POST.get('title')
+                content = request.POST.get('content')
+                post = Post.objects.create(user=request.user, title=title, content=content)
                 post.tags.add(request.POST.get('tags'))
                 post.save()
 
@@ -87,4 +99,5 @@ def delete_post(request, post_id):
     except: 
         messages.error(request, 'The Post does not exist!') 
         return redirect('post:index')
+        
 

@@ -1,0 +1,44 @@
+<h1>This is the detailed page</h1>
+
+<h1>{{ post.title }}</h1>
+
+<p>
+    {{ post.content }}
+</p>
+
+<div>
+    <a href="{% url 'post:detail_post' post.id %}"> edit </a> x
+    <!-- this should be 'follow' if not the owner of post -->
+    <a href="{% url 'post:delete_post' post.id %}"> delete </a> x 
+    <a href="#"> share </a> x 
+    <a href="#">flag</a>
+ </div>
+
+ <hr>
+ <div>
+    <a href="#" onclick="hide_post_comment_form()">Add a comment</a>
+</div>
+
+<p> comments </p>
+<div id="post_comments">
+   <ul>
+    {% for comment in comments %}
+        <li>
+            {{ comment.content }}
+        </li>
+    {% endfor %}
+   </ul>
+</div>
+
+
+<div id="post_comment_div">
+    <form action="{% url 'comment:post_comment' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="post_id" value="{{ post.id }}">
+        <textarea name="post_comment_content" cols="30" rows="10"></textarea>
+        <input type="submit" value="Comment">
+    </form>
+</div>
+<h1>TODO: remove js and add to base class later</h1>
+{% load static %}
+<script src="{% static 'post/js/my_script.js' %}"></script>

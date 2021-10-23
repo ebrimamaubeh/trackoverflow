@@ -20,5 +20,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('account/', include('account.urls')), 
     path('post/', include('post.urls')),
-    path('accounts/', include('django.contrib.auth.urls')), # buildin django 'accounts'
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('comment/', include('comment.urls')),
 ]

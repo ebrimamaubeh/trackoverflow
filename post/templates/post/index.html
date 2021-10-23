@@ -10,21 +10,11 @@
  
 <div>
      {% for post in posts %}
-         <p>{{ post.title }}</p>
-         <p>{{ post.content }}</p>
-         <p>{{ post.user.username }}</p>
+         <p> <a href="detail/{{ post.id }}">{{ post.title }}</a> </p>
          
          {% for tag in post.tags.all %}
            <p><a href="#"> {{ tag }}</a></p>
-         {% endfor %}
-
-         <div>
-            <a href="update/view/{{ post.id }}"> edit </a> x
-            <!-- this should be 'follow' if not the owner of post -->
-            <a href="delete/{{ post.id }}"> delete </a> x 
-            <a href="share/{{ post.id }}"> share </a> x 
-            <a href="#">flag</a>
-         </div>
+         {% endfor %}         
          
      <hr>
      {% endfor %}

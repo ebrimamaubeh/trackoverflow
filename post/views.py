@@ -17,8 +17,9 @@ def detail(request, post_id):
     try:
         post = Post.objects.get(id=post_id)
         comments = Comment.objects.filter(post=post)
+        tags = get_tags_string_post(post)
         return render(request, 'post/detail.html', 
-            context={'post': post, 'comments': comments})
+            context={'post': post, 'comments': comments, 'tags': tags })
     except ObjectDoesNotExist as e:
         return HttpResponse('could not get post!', status=404)
 
@@ -29,14 +30,29 @@ def error_status(status, reason=None):
     else:
         return HttpResponse(status=status, reason=reason)
 
-def get_tags_string(post):
+def get_tags_string_post(post):
     tags = post.tags.all()
-    res = ""
+    res = []
     for tag in tags: 
-        res = res + tag.name
+        res.append(tag.name.replace('"', ''))
 
-    return res.replace('"', ' ') # remove double quote 
+    return res
 
+def get_tags_string_from_input(tags_input):
+    import re
+
+    if '"' in tags_input: 
+        result = []
+        tags = tags_input.split('"') 
+        for tag in tags:
+            if len(tag) > 0: 
+                l = re.split('[, ]', tag)
+                l = [i for i in l if len(i) > 0] # remove empty strings
+                result = result + l 
+        return result 
+    else:
+        l = re.split('[, ]', tags_input)
+        return [i for i in l if len(i) > 0] # remove empty strings 
 
 def postQuestion(request):
     if request.method == 'POST':
@@ -85,9 +101,9 @@ def update_post(request):
 def update_post_view(request, post_id):
     try:
         post = Post.objects.get(id=post_id) 
-        data = {'title': post.title, 'content': post.content, 'tags': get_tags_string(post)}
+        data = {'title': post.title, 'content': post.content, 'tags': get_tags_string_post(post)}
         post_form = PostForm(data)
-        return render(request, "post/update_post_view.html", context={'post_form': post_form, 'post': post})
+        return render(request, "post/update_post_view.html", context={'post_form': post_form, 'post': post, 'tags': data['tags']})
     except ObjectDoesNotExist as e:
         return HttpResponse('Post does not exist!', status=404)
 

@@ -1,5 +1,41 @@
-<h1>This is the detailed page</h1>
+{% extends 'detail-page.html' %}
 
+{% block questionTitle %}
+    {{ post.title }}
+{% endblock questionTitle %}
+
+
+<!-- TODO: The question content box must be dynamic -->
+{% block questionContent %}
+    {{ post.content }}
+{% endblock questionContent %}
+
+
+{% block questionActions %}
+<a href="{% url 'post:update_post_view' post.id %}" 
+    class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-none u-text-palette-1-base u-btn-3">
+    Edit
+</a>
+<a href="{% url 'post:delete_post' post.id %}" 
+    class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-none u-text-palette-1-base u-btn-4">
+    Delete
+</a>
+{% endblock questionActions %}
+
+
+{% block tagsBlock %}
+    <div class="u-container-layout">
+        {% for tag in tags %}
+            <a href="#" class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-none u-text-palette-1-base u-btn-3">
+               {{ tag }}
+            </a>
+        {% endfor %}
+    </div>
+
+{% endblock tagsBlock %}
+
+
+<!-- ////////////////////////// -->
 <h1>{{ post.title }}</h1>
 
 <p>
@@ -39,6 +75,27 @@
         <input type="submit" value="Comment">
     </form>
 </div>
+
+
+
+{% block answerForm %}
+<form action="https://nicepage.com/editor/Forms/Process" method="POST" class="u-clearfix u-form-spacing-50 u-form-vertical u-inner-form" source="email" name="form" style="padding: 0px;">
+    <input type="hidden" id="siteId" name="siteId" value="856171">
+    <input type="hidden" id="pageId" name="pageId" value="856176">
+    <div class="u-form-group u-form-message">
+      <label for="message-1fd4" class="u-form-control-hidden u-label"></label>
+      <textarea placeholder="Enter your message" rows="4" cols="50" id="message-1fd4" name="message" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="" spellcheck="false"></textarea>
+    </div>
+    <div class="u-align-left u-form-group u-form-submit">
+      <a href="#" class="u-btn u-btn-submit u-button-style">Submit</a>
+      <input type="submit" value="submit" class="u-form-control-hidden">
+    </div>
+    <div class="u-form-send-message u-form-send-success"> Thank you! Your message has been sent. </div>
+    <div class="u-form-send-error u-form-send-message"> Unable to send your message. Please fix errors then try again. </div>
+    <input type="hidden" value="" name="recaptchaResponse">
+  </form>
+{% endblock answerForm %}   
+
 <h1>TODO: remove js and add to base class later</h1>
 {% load static %}
 <script src="{% static 'post/js/my_script.js' %}"></script>

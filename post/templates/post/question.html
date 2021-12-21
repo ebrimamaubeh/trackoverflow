@@ -1,11 +1,57 @@
+{% extends 'base.question.html' %}
+
+{% block newQuestion %}
+
 {% if messages %}
    {% for message in messages %}
       <p style="color:red;"> {{ message }} </p>
    {% endfor %}
 {% endif %}
 
-<form action="{% url 'post:post_question' %}" method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Post Your Question">
-</form>
+<section class="u-clearfix u-section-1" id="sec-3c39">
+   <div class="u-clearfix u-sheet u-sheet-1">
+     <h1 class="u-text u-text-default u-text-1">Ask a public question </h1>
+     
+     <div class="u-form u-form-2">
+       <form action="{% url 'post:post_question' %}" method="POST"  style="padding: 10px;">
+         {% csrf_token %}
+         <div class="u-form-group u-form-name">
+            <label for="name-a8a2" class="u-form-control-hidden u-label">Title</label>
+            <input type="text" placeholder="Title of your post" id="name-a8a2" name="title" 
+               class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="">
+          </div>
+
+          <h1 class="u-text u-text-default u-text-2">put the tips here. </h1>
+
+         <div class="u-form-group u-form-message">
+           <textarea placeholder="Enter post content here." rows="15" cols="50" id="message-1c1b" name="content" 
+                  class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required=""></textarea>
+         </div>
+
+         <!-- <div class="u-form-group u-form-name">
+            <label for="tags" class="u-form-control-hidden u-label">Tags</label>
+            <input type="text" placeholder="A comma separated list of tags" id="tags" name="tags" 
+               class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="">
+          </div> -->
+
+          <div class="u-form-group u-form-name">
+            {{ form.tags }}
+          </div>
+
+         <div class="u-form-group u-form-name">
+            <input type="submit"  name="submit" value="Submit" class="u-btn u-btn-submit u-button-style">
+          </div>
+
+       </form>
+     </div>
+   </div>
+ </section>
+  
+{% endblock newQuestion %}
+
+<!-- -<form action="{% url 'post:post_question' %}" method="POST">
+   -    {% csrf_token %}
+   -    {{ form.as_p }}
+   -    <input type="submit" value="Post Your Question">
+   -</form> -->
+   

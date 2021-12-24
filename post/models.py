@@ -12,4 +12,7 @@ class Post(models.Model):
     last_updated = models.DateField(auto_now=True)
     number_of_answers = models.IntegerField(default=0)
     tags = TaggableManager()
+    likes = models.IntegerField(default=0)
+    dislikes = models.IntegerField(default=0)
+
     

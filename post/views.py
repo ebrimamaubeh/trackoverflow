@@ -117,3 +117,13 @@ def delete_post(request, post_id):
         return redirect('post:index')
         
 
+def likePost(request, post_id):
+    try:
+        post = Post.objects.get(id=post_id)
+        print("likes="+ post.likes)
+        post.likes += 1
+        print("updated likes=" + post.likes)
+        post.save()
+    except: 
+        return redirect(request.build_absolute_uri()) # Keeps query parameters
+

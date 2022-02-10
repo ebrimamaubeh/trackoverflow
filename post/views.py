@@ -127,3 +127,5 @@ def likePost(request, post_id):
     except: 
         return redirect(request.build_absolute_uri()) # Keeps query parameters
 
+def test(request):
+    return render(request, "post/test_index.html")

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+
+{% block questionList %}
+
+	<ul class="list-group list-group">
+	  <li class="list-group-item d-flex justify-content-between align-items-start">
+
+	  	<ul class="list-group">
+		  <li class="list-group-item"> <span class="badge bg-primary rounded-pill">200 views</span> </li>
+		  <li class="list-group-item"> <span class="badge bg-primary rounded-pill">200 answers</span> </li>
+		  <li class="list-group-item"> <span class="badge bg-primary rounded-pill">200 votes</span> </li>
+		</ul>
+
+	    <div class="ms-2 me-auto">
+	      <div class="fw-bold">Subheading</div>
+	      <p>Cras justo odio. this is supposed to be the title, whay are ous saying this shit ?????</p>
+
+	      	<div class="btn-group" role="group" aria-label="Basic example">
+				<button type="button" class="btn btn-outline-primary btn-sm">Java</button>
+		      	<button type="button" class="btn btn-outline-primary btn-sm">CSS</button>
+		      	<button type="button" class="btn btn-outline-primary btn-sm">Python</button>
+			</div>
+
+			<p class="text-end">
+				<button type="button" class="btn btn-link">User1</button>
+				<span>Time</span>
+			</p>
+	    </div>
+	  </li>
+	</ul>
+{% endblock questionList %}

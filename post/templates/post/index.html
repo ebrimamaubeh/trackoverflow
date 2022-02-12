@@ -21,19 +21,20 @@
          </ul>
 
           <div class="ms-2 me-auto">
-            <div class="fw-bold"> {{post.title}} </div>
+            <div class="fw-bold"> <a href="#">{{post.title}}</a> </div>
             <span class="d-inline-block text-truncate" style="max-width: 100%;">
                {{post.content}}
             </span><br>
             
             <div class="btn-group" role="group" aria-label="Basic example">
-               <button type="button" class="btn btn-outline-primary btn-sm">Java</button>
-               <button type="button" class="btn btn-outline-primary btn-sm">CSS something</button>
-               <button type="button" class="btn btn-outline-primary btn-sm">Python</button>
+
+               {% for tag in post.tags.all %}
+                  <button type="button" class="btn btn-outline-primary btn-sm"> {{ tag }} </button>
+               {% endfor %}
             </div>
 
             <p class="text-end">
-               <button type="button" class="btn btn-link">userTODO</button>
+               <button type="button" class="btn btn-link"> {{ post.user }} </button>
                <span>{{post.date_created}}</span>
             </p>
           </div>

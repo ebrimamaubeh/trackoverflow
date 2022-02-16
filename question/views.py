@@ -27,6 +27,7 @@ def delete_post(request, post_id):
 	try:
 		post = Post.objects.get(id=post_id)
 		post.delete()
+		messages.success(request, "Post deleted!")
 	except Exception as e:
 		print(e)
 		messages.error(request, "Post does not exist for delete")

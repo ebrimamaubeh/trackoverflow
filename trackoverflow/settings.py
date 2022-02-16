@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'post.apps.PostConfig',
     'account.apps.AccountConfig', 
     'comment.apps.CommentConfig',
+    'question.apps.QuestionConfig', 
 
     'crispy_forms', 
     'taggit', 
@@ -131,3 +132,6 @@ STATICFILES_DIRS = [ # additional files
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+#https://simpleisbetterthancomplex.com/tutorial/2018/08/13/how-to-use-bootstrap-4-forms-with-django.html
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

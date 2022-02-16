@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block questionSection %}
+
+<h1 class="display-3">{{ post.title }}</h1>
+
+<ul class="list-group list-group-horizontal">
+	<li class="list-group-item">Asked: {{ post.date_created }}</li>
+	<li class="list-group-item">Viewed {{ post.post_views }} times</li>
+</ul>
+
+
+<div class="container">
+  <div class="row">
+	    <div class="col-1">
+	      	<div class="btn-group-vertical" role="group">
+				  <a href="#">
+				  	<i class="bi bi-caret-up"></i>
+				  </a>
+				  <h4>{{ post.up_votes }}</h4>
+				  <a href="#">
+				  	<i class="bi bi-caret-down"></i>
+				  </a>
+			</div>
+	    </div>
+	    <div class="col-11">
+	    <ul class="list-group list-group">
+					<li class="list-group-item d-flex justify-content-between align-items-start">
+						<div>
+							{{ post.content }}
+						</div>
+					</li>
+
+					<div class="btn-group" role="group">
+             <ul class="list-group list-group-horizontal">
+								{% for tag in post.tags.all %}
+									<li class="list-group-item">
+	                  <button type="button" class="btn btn-outline-primary btn-sm">
+		                  {{ tag }} 
+		                </button>
+		              </li>
+               {% endfor %}
+						</ul>
+          </div>
+
+          <div class="btn-group" role="group">
+             <ul class="list-group list-group-horizontal">
+							<li class="list-group-item">
+								<a href="#">Share</a>
+							</li>
+							<li class="list-group-item">
+								<a href="/question/edit/{{post.id}}/">Edit</a>
+							</li>
+							<li class="list-group-item">
+								<a href="#">Close</a>
+							</li>
+							<li class="list-group-item">
+								<a href="/question/delete/{{post.id}}/" onclick="return confirm('Are you sure you want to delete?');">
+									Delete
+								</a>
+							</li>
+							<li class="list-group-item">
+								<a href="#">Flag</a>
+							</li>
+						</ul>
+          </div>
+
+			</ul>
+	    </div>
+  </div>
+</div>
+
+{% endblock questionSection %}

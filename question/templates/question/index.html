@@ -8,16 +8,25 @@
 {% endif %}
 
 
-{% block questionList %}
+
+{% block questionSection %}
 
 <ul class="list-group list-group">
-  <li class="list-group-item d-flex justify-content-between align-items-start">
 
       {% for post in posts %}
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+
          <ul class="list-group">
-           <li class="list-group-item"> <span class="badge bg-primary rounded-pill">200 views</span> </li>
-           <li class="list-group-item"> <span class="badge bg-primary rounded-pill">200 answers</span> </li>
-           <li class="list-group-item"> <span class="badge bg-primary rounded-pill">200 votes</span> </li>
+            <li class="list-group-item"> 
+               <span class="badge bg-primary rounded-pill"> {{ post.post_views }} views</span> 
+            </li>
+           <li class="list-group-item"> 
+               <span class="badge bg-primary rounded-pill"> {{ post.number_of_answer }} answers</span> 
+            </li>
+            <li class="list-group-item"> 
+               <!-- TODO: You must implement subtract filters for this. -->
+               <span class="badge bg-primary rounded-pill"> {x} votes</span> 
+            </li>
          </ul>
 
           <div class="ms-2 me-auto">
@@ -38,8 +47,9 @@
                <span>{{post.date_created}}</span>
             </p>
           </div>
+      
+         </li>
       {% endfor %}
       
-  </li>
 </ul>
-{% endblock questionList %}
+{% endblock questionSection %}

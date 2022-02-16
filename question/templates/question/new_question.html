@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+<!-- 
+	put the form for the new question here, using bootstrap. 
+	then validate using front end, and back end. 
+	then make sure the crud for a new question is working for today..... 
+	TODO: Use js validation later. 
+-->
+{% block questionSection %}
+
+<form class="needs-validation" method="POST">
+	{% csrf_token %}
+	<div class="mb-3">
+		{{ form.title|as_crispy_field }}
+	</div>
+	<div class="mb-3">
+		{{ form.content|as_crispy_field }}
+	</div>
+	<div class="mb-3">
+		{{ form.tags | as_crispy_field }}
+	</div>
+	<div class="mb-3">
+	  <input type="submit" class="btn btn-primary mb-3" name="submit" value="Ask Your Question">
+	</div>
+</form>
+
+{% endblock questionSection %}

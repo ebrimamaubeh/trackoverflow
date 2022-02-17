@@ -35,9 +35,11 @@
              <ul class="list-group list-group-horizontal">
 								{% for tag in post.tags.all %}
 									<li class="list-group-item">
-	                  <button type="button" class="btn btn-outline-primary btn-sm">
-		                  {{ tag }} 
-		                </button>
+	                  <a href="/question/tags/{{tag}}">
+		                  	<button type="button" class="btn btn-outline-primary btn-sm">
+				                  {{ tag }} 
+				                </button>
+	                  </a>
 		              </li>
                {% endfor %}
 						</ul>

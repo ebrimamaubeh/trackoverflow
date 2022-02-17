@@ -89,6 +89,7 @@ def ask_question(request):
 				post.save()
 
 				# load the detailed post of the created post. 
+				messages.success(request, "Question post successfuly created!")
 				return redirect("question:detail", post_id=post.id)
 			else: 
 				messages.error(request, 'invalid form values')
@@ -97,3 +98,8 @@ def ask_question(request):
 			# TODO: Just redirect them to the login page. 
 			messages.error(request, 'You must be logged in to post!')
 			return render(request, 'question/new_question.html', context={'form': form})
+
+def tags_list(request, tag):
+	posts = Post.objects.filter(tags__name__in=[tag])
+	return render(request, "question/tags_list.html", context={'posts': posts})
+

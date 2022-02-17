@@ -9,7 +9,7 @@ urlpatterns = [
     path('ask/', views.ask_question, name='ask_question'), 
     path('delete/<int:post_id>/', views.delete_post, name='delete_post'), 
     path('edit/<int:post_id>/', views.edit_post, name='edit_post'), 
-    # path('update/view/<int:post_id>/', views.update_post_view, name='update_post_view'),
+    path('tags/<slug:tag>', views.tags_list, name="tags_list")
     # path('like/<int:post_id>/', views.likePost, name='likePost'),
     # path('test/', views.test, name="test"), 
 ]

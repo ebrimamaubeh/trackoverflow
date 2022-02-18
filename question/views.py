@@ -3,24 +3,37 @@ from django.views.decorators.http import require_http_methods
 from django.contrib import messages
 
 from post.models import Post
-from .forms import PostForm
+from .forms import PostForm, AnswerForm
+from question.models import Answer, Question 
 
 
 def index(request): 
 	posts = Post.objects.all()
 	return render(request, "question/index.html", context={'posts': posts})
 
+
+#show post in detail.
 def detail(request, post_id):
 	try:
 		post = Post.objects.get(id=post_id)
 		post.post_views += 1
 		post.save()
-		return render(request, "question/detail.html", context={'post': post})
+
+		form = AnswerForm()
+
+		#getting answers of this question
+		# question = Question.objects.get(user=request.user, post=post)
+		# answers = Answer.objects.get(user=request.user, question=q)
+
+
+		context = {'post': post, 'form': form}
+		return render(request, "question/detail.html", context=context)
 	except Exception as e:
-		print(e)
+		raise e
 		messages.error(request, "That post does not exist!")
 
 	return redirect("question:index")
+
 
 #Todo: see prompt of delete. 
 def delete_post(request, post_id):
@@ -29,8 +42,8 @@ def delete_post(request, post_id):
 		post.delete()
 		messages.success(request, "Post deleted!")
 	except Exception as e:
-		print(e)
 		messages.error(request, "Post does not exist for delete")
+		raise e 
 
 	return redirect("question:index")
 
@@ -88,6 +101,9 @@ def ask_question(request):
 
 				post.save()
 
+				# create and save question. 
+				Question.objects.create(user=request.user, post=post)
+
 				# load the detailed post of the created post. 
 				messages.success(request, "Question post successfuly created!")
 				return redirect("question:detail", post_id=post.id)
@@ -102,4 +118,26 @@ def ask_question(request):
 def tags_list(request, tag):
 	posts = Post.objects.filter(tags__name__in=[tag])
 	return render(request, "question/tags_list.html", context={'posts': posts})
+
+
+@require_http_methods(['POST'])
+def answer_question(request, post_id):
+	try:
+		post = Post.objects.get(id=post_id)
+		question = Question(user=request.user, post=post)
+		question.save()
+
+		answer = Answer()
+		answer.user = request.user 
+		answer.question = question 
+		answer.content = request.POST.get('content')
+		answer.save()
+
+		messages.success(request, "Answer to Question posted!")
+		return redirect('question:detail', post_id=post_id)
+
+	except Exception as e:
+		raise e
+		messages.error(request, "The question you are trying to answer does not exist!")
+		return redirect("question:index")
 

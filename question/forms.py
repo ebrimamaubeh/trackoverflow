@@ -1,7 +1,8 @@
 from django.forms import ModelForm
 from django import forms 
 
-from post.models import Post 
+from post.models import Post
+from .models import Answer
 
 class PostForm(ModelForm): 
 	class Meta: 
@@ -27,6 +28,22 @@ class PostForm(ModelForm):
 		if len(content) < 10: 
 			self._errors['content'] = self.error_class(
 				['content must be at least 10 characters']
+			)
+
+		return self.cleaned_data
+
+class AnswerForm(ModelForm):
+	class Meta: 
+		model = Answer
+		fields = ['content']
+
+	def clean(self):
+		super(AnswerForm, self).clean()
+
+		content = self.cleaned_data.get('content')
+		if len(content) == 0: 
+			self._errors['content'] = self.error_class(
+				['The Answer field is required.']
 			)
 
 		return self.cleaned_data

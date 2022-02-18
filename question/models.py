@@ -5,26 +5,24 @@ from post.models import Post
 
 # Create your models here.
 class Question(models.Model):
-	user = models.ForeignKey(User, on_delete=models.PROTECT)
-	post = models.ForeignKey(Post, on_delete=models.PROTECT)
+	user = models.ForeignKey(User, default=None, on_delete=models.PROTECT)
+	post = models.ForeignKey(Post, default=None, on_delete=models.CASCADE)
 
 class Answer(models.Model):
-	user = models.ForeignKey(User, on_delete=models.PROTECT)
-	question = models.ForeignKey(Question, on_delete=models.CASCADE)
-
+	user = models.ForeignKey(User, default=None, on_delete=models.PROTECT)
+	question = models.ForeignKey(Question, default=None, on_delete=models.CASCADE)
+	content = models.TextField(null=True)
 	up_votes = models.IntegerField(default=0)
 	down_votes = models.IntegerField(default=0)
 	
 class Comment(models.Model):
-	user = models.ForeignKey(User, on_delete=models.PROTECT)
+	user = models.ForeignKey(User, default=None, on_delete=models.PROTECT)
 
 	#places where a comment can be
 	question = models.ForeignKey(Question, on_delete=models.CASCADE, default=None)
 	answer = models.ForeignKey(Answer, on_delete=models.CASCADE, default=None)
-
 	content = models.TextField()
 	date_created = models.DateField(auto_now_add=True)
 	last_updated = models.DateField(auto_now=True)
-
 	flag = models.BooleanField(default=False)
 	up_votes = models.IntegerField(default=0)

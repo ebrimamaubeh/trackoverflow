@@ -5,15 +5,15 @@
 
 <ul class="list-group list-group">
 
-      {% for post in posts %}
+      {% for question in questions %}
       <li class="list-group-item d-flex justify-content-between align-items-start">
 
          <ul class="list-group">
             <li class="list-group-item"> 
-               <span class="badge bg-primary rounded-pill"> {{ post.post_views }} views</span> 
+               <span class="badge bg-primary rounded-pill"> {{ question.question_views }} views</span> 
             </li>
            <li class="list-group-item"> 
-               <span class="badge bg-primary rounded-pill"> {{ post.number_of_answer }} answers</span> 
+               <span class="badge bg-primary rounded-pill"> {{ question.number_of_answer }} answers</span> 
             </li>
             <li class="list-group-item"> 
                <!-- TODO: You must implement subtract filters for this. -->
@@ -22,14 +22,14 @@
          </ul>
 
           <div class="ms-2 me-auto">
-            <div class="fw-bold"> <a href="detail/{{ post.id }}">{{post.title}}</a> </div>
+            <div class="fw-bold"> <a href="detail/{{ question.id }}">{{question.title}}</a> </div>
             <span class="d-inline-block text-truncate" style="max-width: 100%;">
-               {{post.content}}
+               {{question.content}}
             </span><br>
             
             <div class="btn-group" role="group" aria-label="Basic example">
 
-               {% for tag in post.tags.all %}
+               {% for tag in question.tags.all %}
                   <a href="/question/tags/{{ tag }}">
                      <button type="button" class="btn btn-outline-primary btn-sm">
                         {{ tag }} 
@@ -39,8 +39,8 @@
             </div>
 
             <p class="text-end">
-               <button type="button" class="btn btn-link"> {{ post.user }} </button>
-               <span>{{post.date_created}}</span>
+               <button type="button" class="btn btn-link"> {{ question.user }} </button>
+               <span>{{question.date_created}}</span>
             </p>
           </div>
       

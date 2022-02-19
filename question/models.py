@@ -1,12 +1,20 @@
 from django.db import models
 from django.contrib.auth.models import User
-
-from post.models import Post 
+from taggit.managers import TaggableManager
 
 # Create your models here.
 class Question(models.Model):
-	user = models.ForeignKey(User, default=None, on_delete=models.PROTECT)
-	post = models.ForeignKey(Post, default=None, on_delete=models.CASCADE)
+	user = models.ForeignKey(User, on_delete=models.PROTECT)
+	title = models.CharField(max_length=50)
+	content = models.TextField()
+	date_created = models.DateField(auto_now_add=True)
+	last_updated = models.DateField(auto_now=True)
+	number_of_answers = models.IntegerField(default=0)
+	tags = TaggableManager()
+
+	up_votes = models.IntegerField(default=0)
+	down_votes = models.IntegerField(default=0)
+	question_views = models.IntegerField(default=0)
 
 class Answer(models.Model):
 	user = models.ForeignKey(User, default=None, on_delete=models.PROTECT)

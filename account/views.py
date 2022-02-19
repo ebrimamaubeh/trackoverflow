@@ -14,7 +14,7 @@ def register_user(request):
             user = form.save()
             login(request, user)
             messages.success(request, "Registration Successful")
-            return redirect('post:index') 
+            return redirect('question:index') 
         else: # the else fixed the errors in the form, 
             return render(request, "account/register.html", context={'register_form': form})
     form = NewUserForm()
@@ -32,7 +32,7 @@ def login_user(request):
             if user is not None: 
                 login(request, user)
                 messages.info(request, "You are successfully logged in.")
-                return redirect('post:index')
+                return redirect('question:index')
         else: 
             messages.error(request, "Invalid username or password!")
             return render(request, "account/login.html", context={'login_form': form})
@@ -46,7 +46,7 @@ def logout_user(request):
     if request.user.is_authenticated: 
         logout(request)
         messages.info(request, "Successfully Logged out!")
-        return redirect('post:index')
+        return redirect('question:index')
     else: 
         messages.info(request, "Not logged in")
         return redirect('account:login')

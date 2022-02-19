@@ -5,12 +5,11 @@ from . import views
 app_name = 'question'
 urlpatterns = [
     path('', views.index, name='index'),
-    path('detail/<int:post_id>/', views.detail, name='detail'),
+    path('detail/<int:question_id>/', views.detail, name='detail'),
     path('ask/', views.ask_question, name='ask_question'), 
-    path('delete/<int:post_id>/', views.delete_post, name='delete_post'), 
-    path('edit/<int:post_id>/', views.edit_post, name='edit_post'), 
+    path('delete/<int:question_id>/', views.delete_question, name='delete_question'), 
+    path('edit/<int:question_id>/', views.edit_question, name='edit_question'), 
     path('tags/<slug:tag>', views.tags_list, name="tags_list"), 
-    path('answer/<int:post_id>/', views.answer_question, name="answer_question")
-    # path('like/<int:post_id>/', views.likePost, name='likePost'),
-    # path('test/', views.test, name="test"), 
+    path('answer/<int:question_id>/', views.answer_question, name="answer_question"),
+    path('answer/delete/<int:question_id>/<int:answer_id>/', views.delete_answer, name="delete_answer"),
 ]

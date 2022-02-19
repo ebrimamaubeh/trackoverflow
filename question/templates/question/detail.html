@@ -4,11 +4,11 @@
 
 {% block questionSection %}
 
-<h1 class="display-3">{{ post.title }}</h1>
+<h1 class="display-3">{{ question.title }}</h1>
 
 <ul class="list-group list-group-horizontal">
-	<li class="list-group-item">Asked: {{ post.date_created }}</li>
-	<li class="list-group-item">Viewed {{ post.post_views }} times</li>
+	<li class="list-group-item">Asked: {{ question.date_created }}</li>
+	<li class="list-group-item">Viewed {{ question.question_views }} times</li>
 </ul>
 
 
@@ -19,7 +19,7 @@
 				  <a href="#">
 				  	<i class="bi bi-caret-up"></i>
 				  </a>
-				  <h4>{{ post.up_votes }}</h4>
+				  <h4>{{ question.up_votes }}</h4>
 				  <a href="#">
 				  	<i class="bi bi-caret-down"></i>
 				  </a>
@@ -29,13 +29,13 @@
 	    <ul class="list-group list-group">
 					<li class="list-group-item d-flex justify-content-between align-items-start">
 						<div>
-							{{ post.content }}
+							{{ question.content }}
 						</div>
 					</li>
 
 					<div class="btn-group" role="group">
              <ul class="list-group list-group-horizontal">
-								{% for tag in post.tags.all %}
+								{% for tag in question.tags.all %}
 									<li class="list-group-item">
 	                  <a href="/question/tags/{{tag}}">
 		                  	<button type="button" class="btn btn-outline-primary btn-sm">
@@ -53,13 +53,13 @@
 								<a href="#">Share</a>
 							</li>
 							<li class="list-group-item">
-								<a href="/question/edit/{{post.id}}/">Edit</a>
+								<a href="/question/edit/{{question.id}}/">Edit</a>
 							</li>
 							<li class="list-group-item">
 								<a href="#">Close</a>
 							</li>
 							<li class="list-group-item">
-								<a href="/question/delete/{{post.id}}/" onclick="return confirm('Are you sure you want to delete?');">
+								<a href="/question/delete/{{question.id}}/" onclick="return confirm('Are you sure you want to delete?');">
 									Delete
 								</a>
 							</li>
@@ -75,74 +75,65 @@
 
   <!-- list the answers to the question -->
   <hr>
-    <div class="row">
-	    <div class="col-1">
-	      	<div class="btn-group-vertical" role="group">
-				  <a href="#">
-				  	<i class="bi bi-caret-up"></i>
-				  </a>
-				  <h4>{{ post.up_votes }}</h4>
-				  <a href="#">
-				  	<i class="bi bi-caret-down"></i>
-				  </a>
-			</div>
-	    </div>
-	    <div class="col-11">
-	    <ul class="list-group list-group">
-					<li class="list-group-item d-flex justify-content-between align-items-start">
-						<div>
-							{{ post.content }}
-						</div>
-					</li>
+  {% if question.number_of_answers > 0 %}
+  	{% for answer in answers %}	
+  			<hr>
+				<div class="row">
+			    <div class="col-1">
+			      	<div class="btn-group-vertical" role="group">
+						  <a href="#">
+						  	<i class="bi bi-caret-up"></i>
+						  </a>
+						  <h4>{{ answer.up_votes }}</h4>
+						  <a href="#">
+						  	<i class="bi bi-caret-down"></i>
+						  </a>
+					</div>
+			    </div>
+			    <div class="col-11">
+			    <ul class="list-group list-group">
+							<li class="list-group-item d-flex justify-content-between align-items-start">
+								<div>
+									{{ answer.content }}
+								</div>
+							</li>
 
-					<div class="btn-group" role="group">
-             <ul class="list-group list-group-horizontal">
-								{% for tag in post.tags.all %}
+		          <div class="btn-group" role="group">
+		             <ul class="list-group list-group-horizontal">
 									<li class="list-group-item">
-	                  <a href="/question/tags/{{tag}}">
-		                  	<button type="button" class="btn btn-outline-primary btn-sm">
-				                  {{ tag }} 
-				                </button>
-	                  </a>
-		              </li>
-               {% endfor %}
-						</ul>
-          </div>
+										<a href="#">Share</a>
+									</li>
+									<li class="list-group-item">
+										<a href="/question/edit/{{question.id}}/">Edit</a>
+									</li>
+									<li class="list-group-item">
+										<a href="#">Close</a>
+									</li>
+									<li class="list-group-item">
+										<a href="{% url 'question:delete_answer' question.id answer.id %}" onclick="return confirm('Are you sure you want to delete?');">
+											Delete
+										</a>
+									</li>
+									<li class="list-group-item">
+										<a href="#">Flag</a>
+									</li>
+								</ul>
+		          </div>
 
-          <div class="btn-group" role="group">
-             <ul class="list-group list-group-horizontal">
-							<li class="list-group-item">
-								<a href="#">Share</a>
-							</li>
-							<li class="list-group-item">
-								<a href="/question/edit/{{post.id}}/">Edit</a>
-							</li>
-							<li class="list-group-item">
-								<a href="#">Close</a>
-							</li>
-							<li class="list-group-item">
-								<a href="/question/delete/{{post.id}}/" onclick="return confirm('Are you sure you want to delete?');">
-									Delete
-								</a>
-							</li>
-							<li class="list-group-item">
-								<a href="#">Flag</a>
-							</li>
-						</ul>
-          </div>
-
-			</ul>
-	    </div>
-  </div>
+					</ul>
+			    </div>
+		  </div>
+  	{% endfor %}
+  {% endif %}
 
   <hr>
   <h1>Answer the question here</h1>
   <div class="row">
-  	<form action="/question/answer/{{post.id}}/" method="POST">
+  	<form action="/question/answer/{{question.id}}/" method="POST">
 				{% csrf_token %}
 				<div class="mb-3">
 					<label for="answer"> Your Answer: </label>
-					<textarea id="answer" class="form-control" rows="10"></textarea>
+					<textarea id="answer" class="form-control" name="content" rows="10"></textarea>
 				</div>
 				<div class="mb-3">
 				  <input type="submit" class="btn btn-primary mb-3" name="submit" 

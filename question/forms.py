@@ -1,19 +1,16 @@
 from django.forms import ModelForm
 from django import forms 
 
-from post.models import Post
-from .models import Answer
+from .models import Answer, Question
 
-class PostForm(ModelForm): 
+class QuestionForm(ModelForm): 
 	class Meta: 
-		model = Post
-		#custom fields. 
+		model = Question
 		fields = ['title', 'content', 'tags']
 
 	#validation function
 	def clean(self):
-		# get form data. 
-		super(PostForm, self).clean()
+		super(QuestionForm, self).clean()
 
 		#extract data from form. 
 		title = self.cleaned_data.get('title')

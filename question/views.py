@@ -22,7 +22,7 @@ def detail(request, question_id):
 		answer_form = AnswerForm()
 
 		#getting answers of this question
-		answers = Answer.objects.filter(user=request.user, question=question)
+		answers = Answer.objects.filter(user=question.user, question=question)
 
 		context = {'question': question, 'answer_form': answer_form, 'answers': answers}
 		return render(request, "question/detail.html", context=context)

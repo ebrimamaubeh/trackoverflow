@@ -5,7 +5,6 @@ from django.contrib import messages
 
 from .forms import NewUserForm
 
-
 # Create your views here.
 def register_user(request):
     if request.method == 'POST': 
@@ -36,7 +35,6 @@ def login_user(request):
         else: 
             messages.error(request, "Invalid username or password!")
             return render(request, "account/login.html", context={'login_form': form})
-    
      
     form = AuthenticationForm()
     return render(request, "account/login.html", context={'login_form': form})

@@ -16,14 +16,14 @@
   <div class="row">
 	    <div class="col-1">
 	      	<div class="btn-group-vertical" role="group">
-				  <a href="#">
-				  	<i class="bi bi-caret-up"></i>
-				  </a>
-				  <h4>{{ question.up_votes }}</h4>
-				  <a href="#">
-				  	<i class="bi bi-caret-down"></i>
-				  </a>
-			</div>
+					  <a href="#">
+					  	<i class="bi bi-caret-up"></i>
+					  </a>
+					  <h4>{{ question.up_votes }}</h4>
+					  <a href="#">
+					  	<i class="bi bi-caret-down"></i>
+					  </a>
+				</div>
 	    </div>
 	    <div class="col-11">
 	    <ul class="list-group list-group">
@@ -48,25 +48,54 @@
           </div>
 
           <div class="btn-group" role="group">
-             <ul class="list-group list-group-horizontal">
-							<li class="list-group-item">
-								<a href="#">Share</a>
-							</li>
-							<li class="list-group-item">
-								<a href="/question/edit/{{question.id}}/">Edit</a>
-							</li>
-							<li class="list-group-item">
-								<a href="#">Close</a>
-							</li>
-							<li class="list-group-item">
-								<a href="/question/delete/{{question.id}}/" onclick="return confirm('Are you sure you want to delete?');">
-									Delete
-								</a>
-							</li>
-							<li class="list-group-item">
-								<a href="#">Flag</a>
-							</li>
-						</ul>
+		         <ul class="list-group list-group-horizontal">
+									<li class="list-group-item">
+										<a href="#">Share</a>
+									</li>
+									<li class="list-group-item">
+										<a href="/question/edit/{{question.id}}/">Edit</a>
+									</li>
+									<li class="list-group-item">
+										<a href="#">Close</a>
+									</li>
+									<li class="list-group-item">
+										<a href="/question/delete/{{question.id}}/" onclick="return confirm('Are you sure you want to delete?');">
+											Delete
+										</a>
+									</li>
+									<li class="list-group-item">
+										<a href="#">Flag</a>
+									</li>
+						 </ul>
+          </div>
+
+          <div class="btn-group" role="group">
+		         <ul class="list-group">
+		         		{% for qc in questionComments %}
+		         			<li class="list-group-item">
+			         			<div class="btn-group" role="group">
+			         				<h8>{{ qc.up_votes }}</h8>
+										  <a href="#">
+										  	<i class="bi bi-caret-up"></i>
+										  </a>
+										</div>
+			         			{{ qc.content }}
+			         		</li>
+		         		{% endfor %}
+								<li class="list-group-item">
+									<form action="/question/comment/new/{{question.id}}/" method="POST">
+										{% csrf_token %}
+										<div class="form-group">
+											<label for="question_comment_textarea">Add a comment:</label>
+											<textarea id="question_comment_textarea" class="form-control" 
+													name="content" placeholder="add comment here..." cols="70" required></textarea>
+										</div>
+										<div class="form-group">
+											<input type="submit" class="btn btn-primary" name="submit">
+										</div>
+									</form>
+								</li>
+						 </ul>
           </div>
 
 			</ul>
@@ -119,6 +148,36 @@
 									</li>
 								</ul>
 		          </div>
+
+		          <div class="btn-group" role="group">
+				         <ul class="list-group">
+				         	<!-- https://docs.djangoproject.com/en/dev/topics/db/queries/#following-relationships-backward -->
+				         		{% for answerComment in answer.answercomment_set.all %}
+				         			<li class="list-group-item">
+					         			<div class="btn-group" role="group">
+					         				<h8>{{ answerComment.up_votes }}</h8>
+												  <a href="#">
+												  	<i class="bi bi-caret-up"></i>
+												  </a>
+												</div>
+					         			{{ answerComment.content }}
+					         		</li>
+				         		{% endfor %}
+										<li class="list-group-item">
+											<form action="/question/answer/comment/new/{{question.id}}/{{answer.id}}/"     method="POST">
+												{% csrf_token %}
+												<div class="form-group">
+													<label for="question_comment_textarea">Add a comment:</label>
+													<textarea id="question_comment_textarea" class="form-control" 
+															name="content" placeholder="add comment here..." cols="70" required></textarea>
+												</div>
+												<div class="form-group">
+													<input type="submit" class="btn btn-primary" name="submit">
+												</div>
+											</form>
+										</li>
+								 </ul>
+          		</div>
 
 					</ul>
 			    </div>

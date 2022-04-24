@@ -128,6 +128,8 @@ STATICFILES_DIRS = [ # additional files
     BASE_DIR / 'trackoverflow/static'
 ]
 
+LOGIN_URL = '/account/login/'
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 

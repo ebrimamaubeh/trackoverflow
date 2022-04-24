@@ -4,7 +4,11 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404
 
 from .forms import QuestionForm, AnswerForm
-from question.models import Answer, Question 
+from question.models import Answer, Question, QuestionComment, AnswerComment
+
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
+from django.core.exceptions import ValidationError
 
 
 def index(request): 
@@ -24,18 +28,26 @@ def detail(request, question_id):
 		#getting answers of this question
 		answers = Answer.objects.filter(user=question.user, question=question)
 
-		context = {'question': question, 'answer_form': answer_form, 'answers': answers}
+		questionComments = QuestionComment.objects.filter(question=question)
+
+		context = {
+			'question': question, 'answer_form': answer_form, 
+			'answers': answers, 'questionComments': questionComments
+		}
 		return render(request, "question/detail.html", context=context)
 	except Exception as e:
 		raise e
 		messages.error(request, "That post does not exist!")
-
-	return redirect("question:detail")
+		return redirect("question:detail")
 
 
 #Todo: see prompt of delete. 
+@login_required
 def delete_question(request, question_id):
 	question = get_object_or_404(Question, id=question_id)
+	if request.user != question.user: 
+		raise PermissionDenied("you can only delete questions you asked!")
+	
 	question.delete()
 	messages.success(request, "Question deleted!")
 
@@ -43,6 +55,7 @@ def delete_question(request, question_id):
 
 
 @require_http_methods(['GET', 'POST'])
+@login_required
 def edit_question(request, question_id):
 	post = None
 
@@ -72,6 +85,7 @@ def edit_question(request, question_id):
 
 
 @require_http_methods(['GET', 'POST'])
+@login_required
 def ask_question(request):
 	if request.method == 'GET':
 		form = QuestionForm()
@@ -109,6 +123,7 @@ def tags_list(request, tag):
 
 
 @require_http_methods(['POST'])
+@login_required
 def answer_question(request, question_id):
 	question = get_object_or_404(Question, id=question_id)
 	question.number_of_answers += 1
@@ -129,5 +144,37 @@ def delete_answer(request, question_id, answer_id):
 	answer.delete()
 	messages.success(request, "Answer successfuly deleted")
 	return redirect("question:detail", question_id=question_id)
+
+
+@require_http_methods(['POST'])
+@login_required
+def question_comment(request, question_id):
+	question = get_object_or_404(Question, id=question_id)
+	content = request.POST.get('content')
+	if not content:
+		raise ValueError("Comment message is required!")
+
+	comment = QuestionComment(content=content)
+	comment.question = question
+	comment.content = content
+	comment.user = request.user
+	comment.save()
+
+	return redirect('question:detail', question_id=question_id)
+
+@require_http_methods(['POST'])
+@login_required
+def answer_comment(request, question_id, answer_id):
+	answer = get_object_or_404(Answer, id=answer_id)
+	content = request.POST.get('content')
+	if not content: 
+		raise ValueError("Message of the comment required!")
+	comment = AnswerComment(content=content)
+	comment.answer = answer
+	comment.user = request.user 
+	comment.save()
+
+	return redirect('question:detail', question_id=question_id)
+
 
 

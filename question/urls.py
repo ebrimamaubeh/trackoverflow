@@ -18,8 +18,10 @@ urlpatterns = [
     path('comment/delete/<int:question_id>/<int:comment_id>/', views.delete_question_comment, name='delete_question_comment'),
     path('comment/edit/<int:question_id>/<int:comment_id>/', views.edit_question_comment, name='edit_question_comment'),
     
-    path('answer/comment/delete/<int:question_id>/<int:answer_comment_id>/', views.delete_answer_comment, name='delete_answer_comment'),
+    path('answer/comment/delete/<int:question_id>/<int:answer_comment_id>/', views.delete_answer_comment),
+    path('answer/comment/edit/<int:question_id>/<int:comment_id>/', views.edit_answer_comment),
 
     #js functions
-    path('comment/get/<int:comment_id>/', views.get_question_comment)
-]
+    path('comment/get/<int:comment_id>/', views.get_question_comment),
+    path('answer/comment/get/<int:comment_id>/', views.get_answer_comment),
+]   

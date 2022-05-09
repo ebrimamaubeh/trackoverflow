@@ -45,6 +45,24 @@ function js_get_comment(question_id, comment_id){
     return false;
 }
 
+function js_get_answer_comment(question_id, comment_id){
+    var answer_comment_textarea = document.getElementById('editAnswerCommentTextarea')
+    var xhr = new XMLHttpRequest()
+
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState == 4 && xhr.status == 200){
+            answer_comment_textarea.textContent = xhr.responseText
+            //set the form values. 
+            var form = document.getElementById('editAnswerCommentForm')
+            form.action = "/question/answer/comment/edit/"+ question_id +"/"+ comment_id +"/"
+            return true;
+        }
+    }
+    xhr.open('GET', '/question/answer/comment/get/'+ comment_id +"/")
+    xhr.send()
+    return false;
+}
+
 function set_comment_edit_form_attr(question_id, question_comment_id){
     var form = document.getElementById('editQuestionCommentForm')
     form.action = "/question/comment/edit/" +question_id +"/" + question_comment_id +"/"

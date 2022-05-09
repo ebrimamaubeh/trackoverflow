@@ -120,7 +120,7 @@
 													name="content" placeholder="add comment here..." cols="70" required></textarea>
 										</div>
 										<div class="form-group">
-											<input type="submit" class="btn btn-primary" name="submit">
+											<input type="submit" class="btn btn-primary" name="submit" value="Submit">
 										</div>
 									</form>
 								</li>
@@ -202,20 +202,24 @@
 												</div>
 					         		</li>
 
-					         		/////////////////////// should only be seen by the one who added it.
-		         		      <div class="btn-group" role="group">
-							         <ul class="list-group list-group-horizontal">
-													<li class="list-group-item">
-														<a href="/question/edit/{{question.id}}/">Edit</a>
-													</li>
-													<li class="list-group-item">
-														<a href="/question/answer/comment/delete/{{question.id}}/{{answerComment.id}}/" onclick="return confirm('Are you sure you want to delete?');">
-															Delete
-														</a>
-													</li>
-											 </ul>
-					          	</div>
-					         		//////////////////////
+					         		{% if request.user == answerComment.user %}
+					         			<div class="btn-group" role="group">
+								         <ul class="list-group list-group-horizontal">
+														<li class="list-group-item">
+															<a href="#" id="editAnswerCommentLink" 
+															data-bs-toggle="modal" data-bs-target="#editAnswerCommentModal" 
+													onclick="return js_get_answer_comment({{question.id}}, {{answerComment.id}});">
+																Edit
+															</a>
+														</li>
+														<li class="list-group-item">
+															<a href="/question/answer/comment/delete/{{question.id}}/{{answerComment.id}}/" onclick="return confirm('Are you sure you want to delete?');">
+																Delete
+															</a>
+														</li>
+												 </ul>
+						          	</div>
+					         		{% endif %}
 
 				         		{% endfor %}
 										<li class="list-group-item">

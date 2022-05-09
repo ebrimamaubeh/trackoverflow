@@ -170,6 +170,7 @@ def question_comment(request, question_id):
 	comment.content = content
 	comment.user = request.user
 	comment.save()
+	messages.success(request, "Comment posted!")
 
 	return redirect('question:detail', question_id=question_id)
 
@@ -184,6 +185,7 @@ def answer_comment(request, question_id, answer_id):
 	comment.answer = answer
 	comment.user = request.user 
 	comment.save()
+	messages.success(request, "Comment posted!")
 
 	return redirect('question:detail', question_id=question_id)
 
@@ -199,6 +201,8 @@ def delete_question_comment(request, question_id, comment_id):
 	messages.success(request, "Comment successfuly deleted")
 	return redirect("question:detail", question_id=question_id)
 
+@require_http_methods(['GET'])
+@login_required
 def delete_answer_comment(request, question_id, answer_comment_id): 
 	answerComment = get_object_or_404(AnswerComment, id=answer_comment_id)
 	if request.user != answerComment.user: 
@@ -222,8 +226,26 @@ def edit_question_comment(request, question_id, comment_id):
 
 	questionComment.content = content
 	questionComment.save()
+	messages.success(request, "Comment Updated!")
 
 	return redirect("question:detail", question_id=question_id)
+
+@require_http_methods(['POST'])
+@login_required
+def edit_answer_comment(request, question_id, comment_id):
+	answerComment = get_object_or_404(AnswerComment, id=comment_id)
+	check_permision(request, answerComment)
+	content = request.POST.get('content')
+	if len(content) < 10: 
+		raise ValueError('content must be greate than 10 characters')
+
+	answerComment.content = content
+	answerComment.save()
+	messages.success(request, "Comment Updated!")
+
+	return redirect("question:detail", question_id=question_id)
+
+
 
 @require_http_methods(['GET'])
 @login_required
@@ -233,3 +255,16 @@ def get_question_comment(request, comment_id):
 		raise PermissionDenied("you can only edit what you written!")
 
 	return HttpResponse(questionComment.content)
+
+@require_http_methods(['GET'])
+@login_required
+def get_answer_comment(request, comment_id):
+	answerComment = get_object_or_404(AnswerComment, id=comment_id)
+	if request.user != answerComment.user: 
+		raise PermissionDenied("You can only edit what you written!")
+	return HttpResponse(answerComment.content)
+
+
+def check_permision(request, obj): 
+	if request.user != obj.user: 
+		raise PermissionDenied("You do not have permision to perform this action")

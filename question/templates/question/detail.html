@@ -91,8 +91,8 @@
 										</div>
 			         		</li>
 
-			         	/////////////////////// should only be seen by the one who added it.
-         		     <div class="btn-group" role="group">
+         		     {% if request.user == question.user %}
+         		     	<div class="btn-group" role="group">
 					         <ul class="list-group list-group-horizontal">
 											<li class="list-group-item">
 												<a href="#" id="editQuestionCommentLink" 
@@ -100,10 +100,6 @@
 												 	onclick="return js_get_comment({{question.id}}, {{qc.id}});">
 															Edit
 												</a>
-												<!-- <a href="/question/comment/edit/{{question.id}}/{{qc.id}}/"
-												 	data-bs-toggle="modal" data-bs-target="#editQuestionCommentModal">
-															Edit
-												</a> -->
 											</li>
 											<li class="list-group-item">
 												<a href="/question/comment/delete/{{question.id}}/{{qc.id}}/" onclick="return confirm('Are you sure you want to delete?');">
@@ -112,9 +108,7 @@
 											</li>
 									 </ul>
 			          	</div>
-
-			          	replace div with textarea
-			         	//////////////////////
+         		     {% endif %}
 
 		         		{% endfor %}
 								<li class="list-group-item">

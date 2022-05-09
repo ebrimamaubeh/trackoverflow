@@ -23,20 +23,6 @@ class Answer(models.Model):
 	up_votes = models.IntegerField(default=0)
 	down_votes = models.IntegerField(default=0)
 	
-#TODO: create two models, and replace them with comment.
-#1. QuestionComment
-#2. AnswereComment
-class Comment(models.Model):
-	user = models.ForeignKey(User, default=None, on_delete=models.PROTECT)
-
-	#places where a comment can be
-	question = models.ForeignKey(Question, on_delete=models.CASCADE, default=None)
-	answer = models.ForeignKey(Answer, on_delete=models.CASCADE, default=None)
-	content = models.TextField()
-	date_created = models.DateField(auto_now_add=True)
-	last_updated = models.DateField(auto_now=True)
-	flag = models.BooleanField(default=False)
-	up_votes = models.IntegerField(default=0)
 
 class QuestionComment(models.Model):
 	user = models.ForeignKey(User, default=None, on_delete=models.PROTECT)

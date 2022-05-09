@@ -83,14 +83,14 @@ def edit_question(request, question_id):
 			return 
 		#TODO; validate data.
 
-		
-		editForm = QuestionForm(request.POST)
+		question.title = title
+		question.content = content
 
 		#add tags. 
 		for t in request.POST.get('tags').split(','):
 			question.tags.add(t.replace(",", ""))
 
-		editForm.save()
+		question.save()
 		
 		return redirect("question:detail", question_id=question_id)
 

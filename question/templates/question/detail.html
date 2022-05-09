@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
 
 {% load crispy_forms_tags %}
+{% load static %}
 
 {% block questionSection %}
+
+{% include "my_modals.html" %}
 
 <h1 class="display-3">{{ question.title }}</h1>
 
@@ -10,7 +13,6 @@
 	<li class="list-group-item">Asked: {{ question.date_created }}</li>
 	<li class="list-group-item">Viewed {{ question.question_views }} times</li>
 </ul>
-
 
 <div class="container">
   <div class="row">
@@ -30,6 +32,9 @@
 					<li class="list-group-item d-flex justify-content-between align-items-start">
 						<div>
 							{{ question.content }}
+						</div>
+						<div class="d-flex flex-row-reverse bd-highlight">
+						  <a href="#"> <div class="p-2 bd-highlight">{{ question.user }}</div> </a>
 						</div>
 					</li>
 
@@ -79,8 +84,38 @@
 										  	<i class="bi bi-caret-up"></i>
 										  </a>
 										</div>
-			         			{{ qc.content }}
+			         			
+			         			 <div id="question_comment_content_{{qc.id}}">{{ qc.content }}</div>
+			         			<div class="d-flex flex-row-reverse bd-highlight">
+										  <a href="#"> <div class="p-2 bd-highlight">{{ qc.user }}</div> </a>
+										</div>
 			         		</li>
+
+			         	/////////////////////// should only be seen by the one who added it.
+         		     <div class="btn-group" role="group">
+					         <ul class="list-group list-group-horizontal">
+											<li class="list-group-item">
+												<a href="#" id="editQuestionCommentLink" 
+												 	data-bs-toggle="modal" data-bs-target="#editQuestionCommentModal"
+												 	onclick="return js_get_comment({{question.id}}, {{qc.id}});">
+															Edit
+												</a>
+												<!-- <a href="/question/comment/edit/{{question.id}}/{{qc.id}}/"
+												 	data-bs-toggle="modal" data-bs-target="#editQuestionCommentModal">
+															Edit
+												</a> -->
+											</li>
+											<li class="list-group-item">
+												<a href="/question/comment/delete/{{question.id}}/{{qc.id}}/" onclick="return confirm('Are you sure you want to delete?');">
+													Delete
+												</a>
+											</li>
+									 </ul>
+			          	</div>
+
+			          	replace div with textarea
+			         	//////////////////////
+
 		         		{% endfor %}
 								<li class="list-group-item">
 									<form action="/question/comment/new/{{question.id}}/" method="POST">
@@ -101,6 +136,8 @@
 			</ul>
 	    </div>
   </div>
+
+  <h1 class="display-3"> Answers</h1>
 
   <!-- list the answers to the question -->
   <hr>
@@ -124,6 +161,9 @@
 							<li class="list-group-item d-flex justify-content-between align-items-start">
 								<div>
 									{{ answer.content }}
+								</div>
+								<div class="d-flex flex-row-reverse bd-highlight">
+								  <a href="#"> <div class="p-2 bd-highlight">{{ answer.user }}</div> </a>
 								</div>
 							</li>
 
@@ -161,7 +201,28 @@
 												  </a>
 												</div>
 					         			{{ answerComment.content }}
+					         			<div class="d-flex flex-row-reverse bd-highlight">
+												  <a href="#"> 
+												  	<div class="p-2 bd-highlight">{{ answerComment.user }}</div> 
+												  </a>
+												</div>
 					         		</li>
+
+					         		/////////////////////// should only be seen by the one who added it.
+		         		      <div class="btn-group" role="group">
+							         <ul class="list-group list-group-horizontal">
+													<li class="list-group-item">
+														<a href="/question/edit/{{question.id}}/">Edit</a>
+													</li>
+													<li class="list-group-item">
+														<a href="/question/answer/comment/delete/{{question.id}}/{{answerComment.id}}/" onclick="return confirm('Are you sure you want to delete?');">
+															Delete
+														</a>
+													</li>
+											 </ul>
+					          	</div>
+					         		//////////////////////
+
 				         		{% endfor %}
 										<li class="list-group-item">
 											<form action="/question/answer/comment/new/{{question.id}}/{{answer.id}}/"     method="POST">

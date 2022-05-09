@@ -1,0 +1,26 @@
+
+<!-- Edit Question Comment Modal -->
+<div class="modal fade" id="editQuestionCommentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Comment</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="editQuestionCommentForm" method="POST">
+        <div class="modal-body">
+            <div class="form-group">
+              <!-- value will be filled in js -->
+              {% csrf_token %}
+              <textarea class="form-control" id="editQuestionCommentTextarea" name="content" 
+                rows="10"></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

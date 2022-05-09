@@ -53,16 +53,11 @@ def delete_question(request, question_id):
 
 	return redirect("question:index")
 
-
+#TODO: question edit not working
 @require_http_methods(['GET', 'POST'])
 @login_required
 def edit_question(request, question_id):
-	post = None
-
-	try: 
-		question = Question.objects.get(id=question_id)
-	except Exception as e: 
-		raise e
+	question = get_object_or_404(Question, id=question_id)
 
 	if request.method == 'GET':
 		tags = question.tags.all()
@@ -72,16 +67,32 @@ def edit_question(request, question_id):
 
 		return render(request, "question/edit.html", context=c)
 	else: 
-		#TODO; create form and check if valid.
 		title = request.POST.get('title')
 		content = request.POST.get('content')
+
+		#TODO; validate data.
+		has_errors = False 
+		if len(title) < 5:
+			has_errors = True 
+			messages.error(request, 'Ttile must be more than 5 characters!')
+		if len(content) < 10: 
+			has_errors = True
+			messages.error(request, 'Content must be more than 10 characters!')
+
+		if has_errors: 
+			return 
+		#TODO; validate data.
+
+		
 		editForm = QuestionForm(request.POST)
 
 		#add tags. 
 		for t in request.POST.get('tags').split(','):
 			question.tags.add(t.replace(",", ""))
+
+		editForm.save()
 		
-		return redirect("question:detail", post_id=post_id)
+		return redirect("question:detail", question_id=question_id)
 
 
 @require_http_methods(['GET', 'POST'])
@@ -177,4 +188,48 @@ def answer_comment(request, question_id, answer_id):
 	return redirect('question:detail', question_id=question_id)
 
 
+@require_http_methods(['GET'])
+@login_required
+def delete_question_comment(request, question_id, comment_id):
+	comment = get_object_or_404(QuestionComment, id=comment_id)
+	if request.user != comment.user: 
+		raise PermissionDenied("you can only delete questions you asked!")
 
+	comment.delete()
+	messages.success(request, "Comment successfuly deleted")
+	return redirect("question:detail", question_id=question_id)
+
+def delete_answer_comment(request, question_id, answer_comment_id): 
+	answerComment = get_object_or_404(AnswerComment, id=answer_comment_id)
+	if request.user != answerComment.user: 
+		raise PermissionDenied("you can only delete questions you asked!")
+
+	answerComment.delete()
+	messages.success(request, "Comment successfuly deleted")
+	#check how you can redirect on specific section of the page.
+	return redirect("question:detail", question_id=question_id)
+
+@require_http_methods(['POST'])
+@login_required
+def edit_question_comment(request, question_id, comment_id): 
+	questionComment = get_object_or_404(QuestionComment, id=comment_id)
+	if request.user != questionComment.user: 
+		raise PermissionDenied("you can only edit what you written!")
+
+	content = request.POST.get('content')
+	if len(content) < 10: 
+		raise ValueError('content must be greate than 10 characters')
+
+	questionComment.content = content
+	questionComment.save()
+
+	return redirect("question:detail", question_id=question_id)
+
+@require_http_methods(['GET'])
+@login_required
+def get_question_comment(request, comment_id):
+	questionComment = get_object_or_404(QuestionComment, id=comment_id)
+	if request.user != questionComment.user: 
+		raise PermissionDenied("you can only edit what you written!")
+
+	return HttpResponse(questionComment.content)

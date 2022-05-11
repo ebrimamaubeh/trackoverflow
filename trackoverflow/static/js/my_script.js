@@ -69,3 +69,15 @@ function set_comment_edit_form_attr(question_id, question_comment_id){
 }
 
 
+function js_add_delete_onclick(url){
+    var confirmButton = document.getElementById('deleteConfirmButton')
+    confirmButton.onclick = function (argument) {
+        //create link and click it.
+        var a = document.createElement("a")
+        a.href = url
+        a.click()
+    }
+    return false;
+}
+
+

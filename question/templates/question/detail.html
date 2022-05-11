@@ -55,7 +55,7 @@
           <div class="btn-group" role="group">
 		         <ul class="list-group list-group-horizontal">
 									<li class="list-group-item">
-										<a href="#">Share</a>
+										<a href="#" >Share</a>
 									</li>
 									<li class="list-group-item">
 										<a href="/question/edit/{{question.id}}/">Edit</a>
@@ -64,9 +64,10 @@
 										<a href="#">Close</a>
 									</li>
 									<li class="list-group-item">
-										<a href="/question/delete/{{question.id}}/" onclick="return confirm('Are you sure you want to delete?');">
-											Delete
-										</a>
+										<a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal" 
+										    onclick="return js_add_delete_onclick('/question/delete/{{question.id}}/');">
+										    Delete
+										  </a>
 									</li>
 									<li class="list-group-item">
 										<a href="#">Flag</a>
@@ -102,9 +103,10 @@
 												</a>
 											</li>
 											<li class="list-group-item">
-												<a href="/question/comment/delete/{{question.id}}/{{qc.id}}/" onclick="return confirm('Are you sure you want to delete?');">
-													Delete
-												</a>
+												<a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal" 
+												    onclick="return js_add_delete_onclick('/question/comment/delete/{{question.id}}/{{qc.id}}/');">
+												    Delete
+												  </a>
 											</li>
 									 </ul>
 			          	</div>
@@ -173,9 +175,10 @@
 										<a href="#">Close</a>
 									</li>
 									<li class="list-group-item">
-										<a href="{% url 'question:delete_answer' question.id answer.id %}" onclick="return confirm('Are you sure you want to delete?');">
-											Delete
-										</a>
+										<a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal" 
+										    onclick="return js_add_delete_onclick('/question/answer/delete/{{question.id}}/{{answer.id}}/');">
+										    Delete
+										  </a>
 									</li>
 									<li class="list-group-item">
 										<a href="#">Flag</a>
@@ -213,9 +216,10 @@
 															</a>
 														</li>
 														<li class="list-group-item">
-															<a href="/question/answer/comment/delete/{{question.id}}/{{answerComment.id}}/" onclick="return confirm('Are you sure you want to delete?');">
-																Delete
-															</a>
+															<a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal" 
+															    onclick="return js_add_delete_onclick('/question/answer/comment/delete/{{question.id}}/{{answerComment.id}}/');">
+															    Delete
+															  </a>
 														</li>
 												 </ul>
 						          	</div>

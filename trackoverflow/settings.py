@@ -26,7 +26,7 @@ SECRET_KEY = '%vjp*nl5*qb#y(%t3c3=6p&6jj*&n)ujd2&+%u!a!h7itfm$uo'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
 
 
 # Application definition
@@ -38,12 +38,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'account.apps.AccountConfig', 
+    #'account.apps.AccountConfig', 
     'question.apps.QuestionConfig', 
 
     'crispy_forms', 
     'taggit', 
-]
+
+    # The following apps are required by allauth:
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    # ... include the allauth providers you want to enable:
+    'allauth.socialaccount.providers.google',
+    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -68,10 +76,23 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                # `allauth` needs this from django
+                'django.template.context_processors.request',
             ],
         },
     },
 ]
+
+# django-allauth setups
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
 
 WSGI_APPLICATION = 'trackoverflow.wsgi.application'
 
@@ -105,6 +126,17 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Django-allauthProvider specific settings
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': '376569755230-51p8e78qgcppltfio8ibfcunapsb2v0o.apps.googleusercontent.com',
+            'secret': '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',
+            'key': ''
+        }
+    }
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
@@ -128,10 +160,14 @@ STATICFILES_DIRS = [ # additional files
     BASE_DIR / 'trackoverflow/static'
 ]
 
-LOGIN_URL = '/account/login/'
+
+SITE_ID = 1 # allauth side id required.
+LOGIN_REDIRECT_URL = 'question:index'
+LOGOUT_REDIRECT_URL = 'question:index'
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 #https://simpleisbetterthancomplex.com/tutorial/2018/08/13/how-to-use-bootstrap-4-forms-with-django.html
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+

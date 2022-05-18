@@ -130,8 +130,8 @@ AUTH_PASSWORD_VALIDATORS = [
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'APP': {
-            'client_id': '376569755230-51p8e78qgcppltfio8ibfcunapsb2v0o.apps.googleusercontent.com',
-            'secret': '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',
+            'client_id': '',
+            'secret': '',
             'key': ''
         }
     }

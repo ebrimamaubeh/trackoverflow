@@ -54,6 +54,7 @@
 
           <div class="btn-group" role="group">
 		         <ul class="list-group list-group-horizontal">
+								{% if request.user.is_authenticated %}
 									<li class="list-group-item">
 										<a href="#" >Share</a>
 									</li>
@@ -72,6 +73,11 @@
 									<li class="list-group-item">
 										<a href="#">Flag</a>
 									</li>
+								{% else %}
+									<li class="list-group-item">
+										<a href="/account/login/">Sign in to see actions</a>
+									</li>
+								{% endif %}
 						 </ul>
           </div>
 
@@ -165,24 +171,34 @@
 
 		          <div class="btn-group" role="group">
 		             <ul class="list-group list-group-horizontal">
-									<li class="list-group-item">
-										<a href="#">Share</a>
-									</li>
-									<li class="list-group-item">
-										<a href="/question/edit/{{question.id}}/">Edit</a>
-									</li>
-									<li class="list-group-item">
-										<a href="#">Close</a>
-									</li>
-									<li class="list-group-item">
-										<a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal" 
-										    onclick="return js_add_delete_onclick('/question/answer/delete/{{question.id}}/{{answer.id}}/');">
-										    Delete
-										  </a>
-									</li>
-									<li class="list-group-item">
-										<a href="#">Flag</a>
-									</li>
+		             	  {% if request.user.is_authenticated %}
+											<li class="list-group-item">
+												<a href="#">Share</a>
+											</li>
+											<li class="list-group-item">
+												<a href="#" id="editAnswerLink" 
+													data-bs-toggle="modal" data-bs-target="#editAnswerModal" 
+													onclick="return js_get_answer({{question.id}}, {{answer.id}});">
+													Edit
+												</a>
+											</li>
+											<li class="list-group-item">
+												<a href="#">Close</a>
+											</li>
+											<li class="list-group-item">
+												<a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal" 
+												    onclick="return js_add_delete_onclick('/question/answer/delete/{{question.id}}/{{answer.id}}/');">
+												    Delete
+												  </a>
+											</li>
+											<li class="list-group-item">
+												<a href="#">Flag</a>
+											</li>
+										{% else %}
+											<li class="list-group-item">
+												<a href="/account/login/">Sign in to see actions</a>
+											</li>
+										{% endif %}
 								</ul>
 		          </div>
 

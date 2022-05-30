@@ -12,6 +12,8 @@ urlpatterns = [
     path('tags/<slug:tag>', views.tags_list, name="tags_list"), 
     path('answer/<int:question_id>/', views.answer_question, name="answer_question"),
     path('answer/delete/<int:question_id>/<int:answer_id>/', views.delete_answer, name="delete_answer"),
+    path('answer/edit/<int:question_id>/<int:answer_id>/', views.edit_answer, name="edit_answer"),
+
     path('comment/new/<int:question_id>/', views.question_comment, name='question_comment'),
     path('answer/comment/new/<int:question_id>/<int:answer_id>/', views.answer_comment, name='answer_comment'),
 
@@ -23,5 +25,6 @@ urlpatterns = [
 
     #js functions
     path('comment/get/<int:comment_id>/', views.get_question_comment),
+    path('answer/get/<int:answer_id>/', views.get_answer),
     path('answer/comment/get/<int:comment_id>/', views.get_answer_comment),
 ]   

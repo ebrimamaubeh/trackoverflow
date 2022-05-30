@@ -26,6 +26,36 @@
 </div>
 
 
+<!-- Edit Answer Modal -->
+<div class="modal fade" id="editAnswerModal" tabindex="-1" aria-labelledby="editAnswerModalLabel" aria-hidden="true">
+  <div class="container-fluid">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="answerModalLabel">Edit Answer</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="row">
+              <form id="editAnswerForm" method="POST">
+                <div class="modal-body">
+                <div class="form-group">
+                  <!-- value will be filled in js -->
+                  {% csrf_token %}
+                  <textarea class="form-control" id="editAnswerTextarea" name="content" 
+                    rows="15"></textarea>
+                </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+              </form>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+
 
 <!-- Edit Answer Comment Modal -->
 <div class="modal fade" id="editAnswerCommentModal" tabindex="-1" aria-labelledby="answerModalLabel" aria-hidden="true">

@@ -12,14 +12,15 @@ from django.core.exceptions import ValidationError
 
 
 def index(request): 
-	questions = Question.objects.all()
+	questions = Question.objects.all().filter(is_deleted=False)
 	return render(request, "question/index.html", context={'questions': questions})
 
 
 #show post in detail.
 def detail(request, question_id):
 	try:
-		question = get_object_or_404(Question, id=question_id)
+		#TODO: the user should get deleted questions if he wants. 
+		question = get_object_or_404(Question, id=question_id, is_deleted=False)
 		question.question_views += 1
 		question.save()
 
@@ -44,11 +45,12 @@ def detail(request, question_id):
 #Todo: see prompt of delete. 
 @login_required
 def delete_question(request, question_id):
-	question = get_object_or_404(Question, id=question_id)
+	question = get_object_or_404(Question, id=question_id, is_deleted=False)
 	if request.user != question.user: 
 		raise PermissionDenied("you can only delete questions you asked!")
 	
-	question.delete()
+	question.is_deleted = True
+	question.save()
 	messages.success(request, "Question deleted!")
 
 	return redirect("question:index")
@@ -57,7 +59,7 @@ def delete_question(request, question_id):
 @require_http_methods(['GET', 'POST'])
 @login_required
 def edit_question(request, question_id):
-	question = get_object_or_404(Question, id=question_id)
+	question = get_object_or_404(Question, id=question_id, is_deleted=False)
 
 	if request.method == 'GET':
 		tags = question.tags.all()
@@ -136,7 +138,7 @@ def tags_list(request, tag):
 @require_http_methods(['POST'])
 @login_required
 def answer_question(request, question_id):
-	question = get_object_or_404(Question, id=question_id)
+	question = get_object_or_404(Question, id=question_id, is_deleted=False)
 	question.number_of_answers += 1
 	question.save()
 
@@ -151,8 +153,9 @@ def answer_question(request, question_id):
 
 
 def delete_answer(request, question_id, answer_id):
-	answer = get_object_or_404(Answer, id=answer_id)
-	answer.delete()
+	answer = get_object_or_404(Answer, id=answer_id, is_deleted=False)
+	answer.is_deleted = True
+	answer.save()
 	messages.success(request, "Answer successfuly deleted")
 	return redirect("question:detail", question_id=question_id)
 
@@ -160,7 +163,7 @@ def delete_answer(request, question_id, answer_id):
 @require_http_methods(['POST'])
 @login_required
 def question_comment(request, question_id):
-	question = get_object_or_404(Question, id=question_id)
+	question = get_object_or_404(Question, id=question_id, is_deleted=False)
 	content = request.POST.get('content')
 	if not content:
 		raise ValueError("Comment message is required!")
@@ -177,7 +180,7 @@ def question_comment(request, question_id):
 @require_http_methods(['POST'])
 @login_required
 def answer_comment(request, question_id, answer_id):
-	answer = get_object_or_404(Answer, id=answer_id)
+	answer = get_object_or_404(Answer, id=answer_id, is_deleted=False)
 	content = request.POST.get('content')
 	if not content: 
 		raise ValueError("Message of the comment required!")
@@ -193,22 +196,24 @@ def answer_comment(request, question_id, answer_id):
 @require_http_methods(['GET'])
 @login_required
 def delete_question_comment(request, question_id, comment_id):
-	comment = get_object_or_404(QuestionComment, id=comment_id)
+	comment = get_object_or_404(QuestionComment, id=comment_id, is_deleted=False)
 	if request.user != comment.user: 
 		raise PermissionDenied("you can only delete questions you asked!")
 
-	comment.delete()
+	comment.is_deleted = True
+	comment.save()
 	messages.success(request, "Comment successfuly deleted")
 	return redirect("question:detail", question_id=question_id)
 
 @require_http_methods(['GET'])
 @login_required
 def delete_answer_comment(request, question_id, answer_comment_id): 
-	answerComment = get_object_or_404(AnswerComment, id=answer_comment_id)
+	answerComment = get_object_or_404(AnswerComment, id=answer_comment_id, is_deleted=False)
 	if request.user != answerComment.user: 
 		raise PermissionDenied("you can only delete questions you asked!")
 
-	answerComment.delete()
+	answerComment.is_deleted = True
+	answerComment.save()
 	messages.success(request, "Comment successfuly deleted")
 	#check how you can redirect on specific section of the page.
 	return redirect("question:detail", question_id=question_id)
@@ -216,7 +221,7 @@ def delete_answer_comment(request, question_id, answer_comment_id):
 @require_http_methods(['POST'])
 @login_required
 def edit_question_comment(request, question_id, comment_id): 
-	questionComment = get_object_or_404(QuestionComment, id=comment_id)
+	questionComment = get_object_or_404(QuestionComment, id=comment_id, is_deleted=False)
 	if request.user != questionComment.user: 
 		raise PermissionDenied("you can only edit what you written!")
 
@@ -233,7 +238,7 @@ def edit_question_comment(request, question_id, comment_id):
 @require_http_methods(['POST'])
 @login_required
 def edit_answer_comment(request, question_id, comment_id):
-	answerComment = get_object_or_404(AnswerComment, id=comment_id)
+	answerComment = get_object_or_404(AnswerComment, id=comment_id, is_deleted=False)
 	check_permision(request, answerComment)
 	content = request.POST.get('content')
 	if len(content) < 10: 
@@ -245,21 +250,41 @@ def edit_answer_comment(request, question_id, comment_id):
 
 	return redirect("question:detail", question_id=question_id)
 
+@require_http_methods(['POST'])
+@login_required
+def edit_answer(request, question_id, answer_id):
+	answer = get_object_or_404(Answer, id=answer_id, is_deleted=False)
+	check_permision(request, answer)
+	content = request.POST.get('content')
+	if len(content) < 10: 
+		raise ValueError('content must me greater than 10 characters')
+	answer.content = content
+	answer.save()
+	messages.success(request, "Answer Updated!")
 
+	return redirect("question:detail", question_id=question_id)
 
 @require_http_methods(['GET'])
 @login_required
 def get_question_comment(request, comment_id):
-	questionComment = get_object_or_404(QuestionComment, id=comment_id)
+	questionComment = get_object_or_404(QuestionComment, id=comment_id, is_deleted=False)
 	if request.user != questionComment.user: 
 		raise PermissionDenied("you can only edit what you written!")
-
 	return HttpResponse(questionComment.content)
 
 @require_http_methods(['GET'])
 @login_required
+def get_answer(request, answer_id):
+	answer = get_object_or_404(Answer, id=answer_id, is_deleted=False)
+	if request.user != answer.user:
+		raise PermissionDenied("You can only edit what you have written")
+	return HttpResponse(answer.content)
+
+
+@require_http_methods(['GET'])
+@login_required
 def get_answer_comment(request, comment_id):
-	answerComment = get_object_or_404(AnswerComment, id=comment_id)
+	answerComment = get_object_or_404(AnswerComment, id=comment_id, is_deleted=False)
 	if request.user != answerComment.user: 
 		raise PermissionDenied("You can only edit what you written!")
 	return HttpResponse(answerComment.content)

@@ -36,9 +36,6 @@ function js_get_comment(question_id, comment_id){
             set_comment_edit_form_attr(question_id, comment_id)
             return true;
         }
-        else{
-            //TODO: show a popup message with error.
-        }
     }
     xhr.open('GET', '/question/comment/get/'+ comment_id)
     xhr.send()
@@ -63,6 +60,23 @@ function js_get_answer_comment(question_id, comment_id){
     return false;
 }
 
+function js_get_answer(question_id, answer_id){
+    var answer_textarea = document.getElementById('editAnswerTextarea')
+    var xhr = new XMLHttpRequest()
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState == 4 && xhr.status == 200){
+            answer_textarea.textContent = xhr.responseText
+            var form = document.getElementById('editAnswerForm')
+            form.action = "/question/answer/edit/"+ question_id +"/"+ answer_id +"/"
+            return true;
+        }
+    }
+    xhr.open('GET', '/question/answer/get/'+ answer_id + '/')
+    xhr.send()
+    return false;
+}
+
+
 function set_comment_edit_form_attr(question_id, question_comment_id){
     var form = document.getElementById('editQuestionCommentForm')
     form.action = "/question/comment/edit/" +question_id +"/" + question_comment_id +"/"
@@ -79,5 +93,3 @@ function js_add_delete_onclick(url){
     }
     return false;
 }
-
-

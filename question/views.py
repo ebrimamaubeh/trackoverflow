@@ -293,3 +293,52 @@ def get_answer_comment(request, comment_id):
 def check_permision(request, obj): 
 	if request.user != obj.user: 
 		raise PermissionDenied("You do not have permision to perform this action")
+
+
+
+def add_question_notification(request, question_id):
+	question = get_object_or_404(Question, id=question_id, is_deleted=False)
+	if not question.notify: 
+		question.notify = True
+		question.save()
+		messages.success(request, 'Notification added for this question!')
+	else: 
+		messages.warning(request, 'Notification already added for this question!')
+
+	return redirect('question:detail', question_id=question_id)
+
+
+def remove_question_notification(request, question_id):
+	question = get_object_or_404(Question, id=question_id, is_deleted=False)
+	if question.notify: 
+		question.notify = False
+		question.save()
+		messages.success(request, 'Notification removed for this question!')
+	else: 
+		messages.warning(request, 'Notification already removed for this question!')
+
+	return redirect('question:detail', question_id=question_id) 
+
+
+def add_answer_notification(request, question_id, answer_id):
+	answer = get_object_or_404(Answer, id=answer_id, is_deleted=False)
+	if not answer.notify:
+		answer.notify = True
+		answer.save()
+		messages.success(request, "Notification added for this answer!")
+	else:
+		messages.warning(request, "Notification already added for this answer!")
+
+	return redirect("question:detail", question_id=question_id)
+
+def remove_answer_notification(request, question_id, answer_id):
+	answer = get_object_or_404(Answer, id=answer_id, is_deleted=False)
+	if answer.notify:
+		answer.notify = False
+		answer.save()
+		messages.success(request, "Notification removed for this answer!")
+	else:
+		messages.warning(request, "Notification already removed for this answer!")
+	
+	return redirect("question:detail", question_id=question_id)
+

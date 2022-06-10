@@ -71,7 +71,11 @@
 										  </a>
 									</li>
 									<li class="list-group-item">
-										<a href="#">Flag</a>
+										<a href="#" title="Add notification for this question" data-bs-toggle="modal" 
+												data-bs-target="#notifyModal" 
+												onclick="return js_add_question_notify('{{question.id}}');">
+											Notification
+										</a>
 									</li>
 								{% else %}
 									<li class="list-group-item">
@@ -84,38 +88,39 @@
           <div class="btn-group" role="group">
 		         <ul class="list-group">
 		         		{% for qc in questionComments %}
-		         			<li class="list-group-item">
-			         			<div class="btn-group" role="group">
-			         				<h8>{{ qc.up_votes }}</h8>
-										  <a href="#">
-										  	<i class="bi bi-caret-up"></i>
-										  </a>
-										</div>
-			         			
-			         			 <div id="question_comment_content_{{qc.id}}">{{ qc.content }}</div>
-			         			<div class="d-flex flex-row-reverse bd-highlight">
-										  <a href="#"> <div class="p-2 bd-highlight">{{ qc.user }}</div> </a>
-										</div>
-			         		</li>
-
-         		     {% if request.user == question.user %}
-         		     	<div class="btn-group" role="group">
-					         <ul class="list-group list-group-horizontal">
-											<li class="list-group-item">
-												<a href="#" id="editQuestionCommentLink" 
-												 	data-bs-toggle="modal" data-bs-target="#editQuestionCommentModal"
-												 	onclick="return js_get_comment({{question.id}}, {{qc.id}});">
-															Edit
-												</a>
-											</li>
-											<li class="list-group-item">
-												<a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal" 
-												    onclick="return js_add_delete_onclick('/question/comment/delete/{{question.id}}/{{qc.id}}/');">
-												    Delete
-												  </a>
-											</li>
-									 </ul>
-			          	</div>
+		         			{% if not qc.is_deleted %}
+			         			<li class="list-group-item">
+				         			<div class="btn-group" role="group">
+				         				<h8>{{ qc.up_votes }}</h8>
+											  <a href="#">
+											  	<i class="bi bi-caret-up"></i>
+											  </a>
+											</div>
+				         			
+				         			 <div id="question_comment_content_{{qc.id}}">{{ qc.content }}</div>
+				         			<div class="d-flex flex-row-reverse bd-highlight">
+											  <a href="#"> <div class="p-2 bd-highlight">{{ qc.user }}</div> </a>
+											</div>
+				         		</li>
+	         		     {% if request.user == question.user %}
+	         		     	<div class="btn-group" role="group">
+						         <ul class="list-group list-group-horizontal">
+												<li class="list-group-item">
+													<a href="#" id="editQuestionCommentLink" 
+													 	data-bs-toggle="modal" data-bs-target="#editQuestionCommentModal"
+													 	onclick="return js_get_comment({{question.id}}, {{qc.id}});">
+																Edit
+													</a>
+												</li>
+												<li class="list-group-item">
+													<a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal" 
+													    onclick="return js_add_delete_onclick('/question/comment/delete/{{question.id}}/{{qc.id}}/');">
+													    Delete
+													  </a>
+												</li>
+										 </ul>
+				          	</div>
+	         		     {% endif %}
          		     {% endif %}
 
 		         		{% endfor %}
@@ -192,7 +197,11 @@
 												  </a>
 											</li>
 											<li class="list-group-item">
-												<a href="#">Flag</a>
+												<a href="#" title="Add notification for this question" data-bs-toggle="modal" 
+														data-bs-target="#notifyModal" 
+														onclick="return js_add_answer_notify('{{question.id}}','{{answer.id}}');">
+													Notification
+												</a>
 											</li>
 										{% else %}
 											<li class="list-group-item">
@@ -206,41 +215,43 @@
 				         <ul class="list-group">
 				         	<!-- https://docs.djangoproject.com/en/dev/topics/db/queries/#following-relationships-backward -->
 				         		{% for answerComment in answer.answercomment_set.all %}
-				         			<li class="list-group-item">
-					         			<div class="btn-group" role="group">
-					         				<h8>{{ answerComment.up_votes }}</h8>
-												  <a href="#">
-												  	<i class="bi bi-caret-up"></i>
-												  </a>
-												</div>
-					         			{{ answerComment.content }}
-					         			<div class="d-flex flex-row-reverse bd-highlight">
-												  <a href="#"> 
-												  	<div class="p-2 bd-highlight">{{ answerComment.user }}</div> 
-												  </a>
-												</div>
-					         		</li>
+				         			{% if not answerComment.is_deleted %}
+						         			<li class="list-group-item">
+							         			<div class="btn-group" role="group">
+							         				<h8>{{ answerComment.up_votes }}</h8>
+														  <a href="#">
+														  	<i class="bi bi-caret-up"></i>
+														  </a>
+														</div>
+							         			{{ answerComment.content }}
+							         			<div class="d-flex flex-row-reverse bd-highlight">
+														  <a href="#"> 
+														  	<div class="p-2 bd-highlight">{{ answerComment.user }}</div> 
+														  </a>
+														</div>
+							         		</li>
 
-					         		{% if request.user == answerComment.user %}
-					         			<div class="btn-group" role="group">
-								         <ul class="list-group list-group-horizontal">
-														<li class="list-group-item">
-															<a href="#" id="editAnswerCommentLink" 
-															data-bs-toggle="modal" data-bs-target="#editAnswerCommentModal" 
-													onclick="return js_get_answer_comment({{question.id}}, {{answerComment.id}});">
-																Edit
-															</a>
-														</li>
-														<li class="list-group-item">
-															<a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal" 
-															    onclick="return js_add_delete_onclick('/question/answer/comment/delete/{{question.id}}/{{answerComment.id}}/');">
-															    Delete
-															  </a>
-														</li>
-												 </ul>
-						          	</div>
+							         		{% if request.user == answerComment.user %}
+							         			<div class="btn-group" role="group">
+										         <ul class="list-group list-group-horizontal">
+																<li class="list-group-item">
+																	<a href="#" id="editAnswerCommentLink" 
+																	data-bs-toggle="modal" data-bs-target="#editAnswerCommentModal" 
+															onclick="return js_get_answer_comment({{question.id}}, {{answerComment.id}});">
+																		Edit
+																	</a>
+																</li>
+																<li class="list-group-item">
+																	<a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal" 
+																	    onclick="return js_add_delete_onclick('/question/answer/comment/delete/{{question.id}}/{{answerComment.id}}/');">
+																	    Delete
+																	  </a>
+																</li>
+														 </ul>
+								          	</div>
+					         			{% endif %}
+
 					         		{% endif %}
-
 				         		{% endfor %}
 										<li class="list-group-item">
 											<form action="/question/answer/comment/new/{{question.id}}/{{answer.id}}/"     method="POST">

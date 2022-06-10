@@ -93,3 +93,41 @@ function js_add_delete_onclick(url){
     }
     return false;
 }
+
+function js_add_question_notify(question_id){
+    var qConfirmNotify = document.getElementById('notifyConfirmButton')
+    var qCancelNotify = document.getElementById('notifyCancelButton')
+
+    qConfirmNotify.onclick = function(){
+        var a = document.createElement('a')
+        a.href = "/question/notify/"+ question_id + "/"
+        a.click()
+    }
+
+    qCancelNotify.onclick = function(){
+        var a = document.createElement('a')
+        a.href = '/question/cancel/notify/'+ question_id + '/'
+        a.click()
+    }
+
+    return false;
+}
+
+function js_add_answer_notify(question_id, answer_id){
+    var qConfirmNotify = document.getElementById('notifyConfirmButton')
+    var qCancelNotify = document.getElementById('notifyCancelButton')
+
+    qConfirmNotify.onclick = function(){
+        var a = document.createElement('a')
+        a.href = "/question/answer/notify/"+ question_id + "/" + answer_id + "/"
+        a.click()
+    }
+
+    qCancelNotify.onclick = function(){
+        var a = document.createElement('a')
+        a.href = "/question/answer/cancel/notify/" + question_id + "/" + answer_id + "/"
+        a.click()
+    }
+
+    return false
+}

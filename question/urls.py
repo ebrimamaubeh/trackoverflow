@@ -27,4 +27,10 @@ urlpatterns = [
     path('comment/get/<int:comment_id>/', views.get_question_comment),
     path('answer/get/<int:answer_id>/', views.get_answer),
     path('answer/comment/get/<int:comment_id>/', views.get_answer_comment),
+    
+    path('notify/<int:question_id>/', views.add_question_notification),
+    path('cancel/notify/<int:question_id>/', views.remove_question_notification),
+    path('answer/notify/<int:question_id>/<int:answer_id>/', views.add_answer_notification),
+    path('answer/cancel/notify/<int:question_id>/<int:answer_id>/', views.remove_answer_notification),
+
 ]   

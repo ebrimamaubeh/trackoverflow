@@ -15,6 +15,7 @@ class Question(models.Model):
 	down_votes = models.IntegerField(default=0)
 	question_views = models.IntegerField(default=0)
 	is_deleted = models.BooleanField(default=False)
+	notify = models.BooleanField(default=False)
 
 class Answer(models.Model):
 	user = models.ForeignKey(User, default=None, on_delete=models.PROTECT)
@@ -23,7 +24,7 @@ class Answer(models.Model):
 	up_votes = models.IntegerField(default=0)
 	down_votes = models.IntegerField(default=0)
 	is_deleted = models.BooleanField(default=False)
-	is_deleted = models.BooleanField(default=False)
+	notify = models.BooleanField(default=False)
 
 class QuestionComment(models.Model):
 	user = models.ForeignKey(User, default=None, on_delete=models.PROTECT)
@@ -33,6 +34,7 @@ class QuestionComment(models.Model):
 	last_updated = models.DateField(auto_now=True)
 	flag = models.BooleanField(default=False)
 	up_votes = models.IntegerField(default=0)
+	is_deleted = models.BooleanField(default=False)
 
 class AnswerComment(models.Model):
 	user = models.ForeignKey(User, default=None, on_delete=models.PROTECT)
@@ -43,3 +45,12 @@ class AnswerComment(models.Model):
 	flag = models.BooleanField(default=False)
 	up_votes = models.IntegerField(default=0)
 	is_deleted = models.BooleanField(default=False)
+	is_deleted = models.BooleanField(default=False)
+
+
+
+#testing notifications. 
+#functions i want to be called. 
+# 1. users should indicate which questions/answers should be tracked. 
+
+

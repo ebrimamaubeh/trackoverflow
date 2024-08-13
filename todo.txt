@@ -1,0 +1,9 @@
+// solve this using post message.
+1. copy the text and display it when the user presses the copy button.
+
+// use data storage to acomplish this.
+2. then save the copied text.
+
+3. search the data storage and send user notifications when the code it updated.
+
+4. implement some settings, and the user can change. // bonus.

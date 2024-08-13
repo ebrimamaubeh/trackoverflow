@@ -23,24 +23,26 @@ export function activate(context: vscode.ExtensionContext) {
         const cssSrc = panel.webview.asWebviewUri(cssPagth);
 
 		panel.webview.html = getHtmlContent(scriptSrc, cssSrc);
-		vscode.window.showInformationMessage('showing this message. dont use console.log');//testing.
 
-        // use messages to solve this problem.
-        // you can copy code and use storage to persist the data.
-        // solution; use commands, plus postmessages. 
-        // panel.webview.postMessage
+
+        //handle message from webview.
+        panel.webview.onDidReceiveMessage(
+            message => {
+                switch(message.command){
+                    case 'codeCopied':
+                        vscode.window.showInformationMessage(message.text);
+                        return;
+                }
+            }, 
+            undefined, 
+            context.subscriptions
+        );
 	});
 	context.subscriptions.push(stackOverdlowView);
 }
 
 // this method is called when your extension is deactivated
 export function deactivate() {}
-
-
-function storeDate(){
-    //return only the value
-    
-}
 
 
 function getHtmlContent(scriptSrc: vscode.Uri, cssSrc: vscode.Uri) {

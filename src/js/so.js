@@ -1,6 +1,7 @@
 let searchbar = document.getElementById('search');
 searchbar.focus();
 
+const vscode = acquireVsCodeApi();
 
 const copyToClipboard = str => {
     const el = document.createElement('textarea');
@@ -13,11 +14,15 @@ const copyToClipboard = str => {
     document.execCommand('copy');
     document.body.removeChild(el);
 
-    //create an element, inject it in the file. 
-    //and get the value and return it later.
-
-    
+    sendMessageToExtension(str);
 };
+
+function sendMessageToExtension(value){
+    vscode.postMessage({
+        command: 'codeCopied',
+        text: value 
+    });
+}
 
 function renderCopyButtons(){
     document.querySelectorAll('pre > code').forEach(code => {

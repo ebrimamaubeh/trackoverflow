@@ -3,7 +3,8 @@ searchbar.focus();
 
 const vscode = acquireVsCodeApi();
 
-const copyToClipboard = str => {
+//TODO; modify this to be a function.
+function copyToClipboard(button, str) {
     const el = document.createElement('textarea');
     el.value = str;
     el.setAttribute('readonly', '');
@@ -14,19 +15,23 @@ const copyToClipboard = str => {
     document.execCommand('copy');
     document.body.removeChild(el);
 
-    sendMessageToExtension(str);
+    const divParent = button.parentElement.parentElement.parentElement;
+
+    console.log('div parent', divParent);
+    console.log('link = ', divParent.firstChild.href);
 };
 
-function sendMessageToExtension(value){
+function sendMessageToExtension(button){
+    // get link for the question and save that.
     vscode.postMessage({
         command: 'codeCopied',
-        text: value 
+        text: 'testing' // 'this' represents the button that has been clicked. verify this. 
     });
 }
 
 function renderCopyButtons(){
     document.querySelectorAll('pre > code').forEach(code => {
-        code.innerHTML += '<button class="content-220499" onclick="copyToClipboard(this.parentElement.innerHTML.slice(0, this.parentElement.innerHTML.indexOf(\'content-220499\') - 15))">Copy</button>';
+        code.innerHTML += '<button class="content-220499" onclick="copyToClipboard(this, this.parentElement.innerHTML.slice(0, this.parentElement.innerHTML.indexOf(\'content-220499\') - 15))">Copy</button>';
     });
 }
 
@@ -45,7 +50,9 @@ function hideAnswer(el){
 }
 function viewAnswer(el){
     el.innerHTML = 'Loading answer';
-    fetch('https://api.stackexchange.com/2.2/questions/'+el.dataset.questionid+'/answers?order=desc&sort=votes&site=stackoverflow&filter=withbody')
+    const link = 'https://api.stackexchange.com/2.2/questions/'+el.dataset.questionid+'/answers?order=desc&sort=votes&site=stackoverflow&filter=withbody';
+    console.log('temp link = ', link);
+    fetch(link)
         .then(response => response.json())
         .then(data => {
             document.querySelector(".answer-container-"+el.dataset.index).innerHTML = '<h2>Answer:</h2>'+data.items[0].body;

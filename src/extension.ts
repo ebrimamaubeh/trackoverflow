@@ -24,13 +24,25 @@ export function activate(context: vscode.ExtensionContext) {
 
 		panel.webview.html = getHtmlContent(scriptSrc, cssSrc);
 
+        //////////////////////////// TODO /////////////////////
+        let x = {
+            'question': 'todo', //link to the question.
+            'answer': 'todo',  // link to the answer.
+            'code': 'put copied code here',  //code copied by the user.
+            'date': '' //current date and time stamp. used to know if the code has changed since then.
+        };
+        //access like this.
+        x.answer; //etc.
+        //////////////////////////// TODO /////////////////////
 
         //handle message from webview.
         panel.webview.onDidReceiveMessage(
             message => {
                 switch(message.command){
-                    case 'codeCopied':
+                    case 'codeCopied': //this should be a link.
                         vscode.window.showInformationMessage(message.text);
+                        // store message here...
+                        // context.workspaceState.
                         return;
                 }
             }, 

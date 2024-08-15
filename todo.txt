@@ -1,3 +1,7 @@
+I am re-doing everything. I will make my own search and find methods, as opposed to using forked project
+on github. currently working on this. all the files of the old one will be left untouched, and 
+renamed to old.x.html / old.x.css etc.
+
 // solve this using post message.
 1. copy the text and display it when the user presses the copy button.
 
